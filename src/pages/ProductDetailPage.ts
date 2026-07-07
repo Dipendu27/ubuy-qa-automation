@@ -48,8 +48,9 @@ export class ProductDetailPage {
 
   /** Set the quantity in the quantity input */
   async setQuantity(quantity: number): Promise<void> {
-    await this.quantityInput.clear();
-    await this.quantityInput.fill(String(quantity));
+    if (quantity === 1) return; // Default quantity is 1 on PDP
+    await this.quantityInput.clear({ force: true });
+    await this.quantityInput.fill(String(quantity), { force: true });
   }
 
   /** Add the product to cart with the specified quantity */
