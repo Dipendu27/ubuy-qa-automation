@@ -12,7 +12,12 @@ import { env } from '../../src/config/env.js';
 
 test.describe('Order History & Tracking — P1 Business Rules', () => {
   test.beforeEach(async ({ loginPage }) => {
-    test.skip(!env.testUserEmail || !env.testUserPassword, 'Test credentials not configured');
+    const hasRealCreds =
+      env.testUserEmail &&
+      env.testUserPassword &&
+      !env.testUserEmail.includes('example.com') &&
+      !env.testUserPassword.includes('your-test');
+    test.skip(!hasRealCreds, 'Real test credentials not configured in .env');
     await loginPage.goto();
     await loginPage.login(env.testUserEmail, env.testUserPassword);
   });

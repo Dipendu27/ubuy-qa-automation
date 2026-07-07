@@ -20,10 +20,14 @@ test.describe('Shipping Calculation — P1 Business Rules', () => {
     cartPage,
     loginPage,
     addressStep,
-    shippingStep,
     page,
   }) => {
-    test.skip(!env.testUserEmail || !env.testUserPassword, 'Test credentials not configured');
+    const hasRealCreds =
+      env.testUserEmail &&
+      env.testUserPassword &&
+      !env.testUserEmail.includes('example.com') &&
+      !env.testUserPassword.includes('your-test');
+    test.skip(!hasRealCreds, 'Real test credentials not configured in .env');
 
     // Login
     await loginPage.goto();
