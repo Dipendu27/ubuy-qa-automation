@@ -4,15 +4,17 @@ A production-grade, end-to-end UI test automation framework built for **Ubuy Ind
 
 ---
 
-## 🛑 Strict Safety Guardrails (Non-Negotiable)
+## 🛑 Safety Rails & Financial Safety (Non-Negotiable)
 
-This framework is configured to execute against a live, production e-commerce platform. To ensure zero disruption and strict compliance, the following safety guardrails are hardcoded and enforced across all test specs:
-
-1. **🚫 Zero Real Payment Submissions:** Every checkout test strictly halts at the final order review screen immediately prior to payment submission. No order placement CTA is ever clicked. No real card details or billing credentials are used.
-2. **🛡️ Real Browser Fingerprinting (Headed Mode):** To comply with Cloudflare bot protections and avoid triggering WAF blocks, tests run in headed Chromium by default. No attempt is made to bypass, spoof, or evade bot detection.
-3. **⏱️ Enforced Rate Limiting:** All page actions and navigations utilize built-in think-time throttling (`throttle()`) to simulate realistic human browsing patterns and prevent server overloading.
-4. **🧵 Single-Worker Execution:** Tests are restricted to serial execution (`workers: 1`) both locally and in CI to avoid concurrency spikes.
-5. **🔐 Strict Secrets Management:** All account credentials and sensitive parameters are managed exclusively via environment variables (`.env`). Nothing is hardcoded.
+> [!CAUTION]
+> **FINANCIAL & INFRASTRUCTURE SAFETY GUARDRAILS**
+> This framework executes against a live production e-commerce platform. To ensure zero financial risk and prevent service disruption, the following load-bearing safety features are hardcoded into the architecture:
+>
+> 1. **🚫 Zero Real Payment Submissions:** This test suite **never submits real payment**. Every checkout test strictly halts at the order review screen. Furthermore, `PaymentStep.ts` intentionally omits any `placeOrder()` method or submission locator so an order cannot be placed programmatically.
+> 2. **🧵 Serial Execution (`workers: 1`):** Tests are restricted to single-worker execution in both local and CI environments (`playwright.config.ts`). **This is a load-bearing safety rail** designed to avoid concurrency spikes against production servers and must never be increased in future "optimization" PRs.
+> 3. **⏱️ Enforced Rate Throttling (`throttle()`):** All navigations and user actions invoke built-in think-time delays (`src/utils/throttle.ts`) to simulate natural human cadence and avoid IP bans or rate-limiting. **Do not remove or reduce throttling.**
+> 4. **🛡️ Headed Execution Default:** To comply with Cloudflare WAF inspections, tests run in headed Chromium by default. No attempt is made to bypass or spoof bot detection mechanisms.
+> 5. **🔐 Environment Secrets Only:** Credentials are read strictly from environment variables (`.env`). No sensitive account details or payment data are ever stored in source code.
 
 ---
 
@@ -119,3 +121,21 @@ npm run report
 ## 📋 Phase 0 — Live Selector Discovery
 
 Because production sites evolve and may employ dynamic class names, this framework uses a centralized locator registry (`src/locators/`). Before running suites against live production for the first time, review `docs/discovery-log.md` and audit confirmed selectors against the live DOM.
+
+### How Selectors Get Confirmed
+To maintain transparency and prevent regression drift, any new selector added to `src/locators/*.ts` must ship with an evidence artifact in the same commit (§3.3):
+1. Save a dated screenshot (`.png`) or Playwright trace (`.zip`) under `docs/evidence/`.
+2. Record the verified selector and reference the artifact filename in `docs/discovery-log.md`.
+3. Tag the locator in source code as `// ✅ CONFIRMED (see docs/evidence/filename.png)`. Selectors without dedicated screenshot/trace evidence files must remain tagged `// 🔶 UNVERIFIED (heuristic fallback selector)`.
+
+---
+
+## ⚠️ Known Limitations & Cloudflare WAF
+
+> [!WARNING]
+> **CI Execution on Shared Runners**
+> The GitHub Actions workflow (`.github/workflows/nightly-smoke.yml`) runs on shared GitHub-hosted `ubuntu-latest` runners using `xvfb-run`. Cloudflare WAF is materially more likely to challenge or hard-block traffic originating from shared datacenter IP ranges than from residential or corporate IPs.
+>
+> **Mitigation & Workaround (§3.6):**
+> * A global WAF challenge detector (`src/utils/waf.ts`) is integrated into the automatic test fixture (`base.fixture.ts`). If a Cloudflare challenge page ("Just a moment" or WAF interstitial) is encountered, tests are cleanly skipped and annotated with `environment-blocked-by-waf` instead of failing with generic locator timeouts.
+> * **Long-Term Recommendation:** For 100% reliable scheduled nightly smoke runs against production, execute the test suite from a self-hosted runner on a corporate/office network or residential static IP.

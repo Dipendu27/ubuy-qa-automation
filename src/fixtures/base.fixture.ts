@@ -19,6 +19,7 @@ import { ShippingStep } from '../pages/checkout/ShippingStep.js';
 import { PaymentStep } from '../pages/checkout/PaymentStep.js';
 import { MyAccountPage } from '../pages/MyAccountPage.js';
 import { StoreSwitcher } from '../components/StoreSwitcher.js';
+import { checkCloudflareWaf } from '../utils/waf.js';
 
 /** Type definition for all page object fixtures */
 type PageObjectFixtures = {
@@ -34,6 +35,7 @@ type PageObjectFixtures = {
   paymentStep: PaymentStep;
   myAccountPage: MyAccountPage;
   storeSwitcher: StoreSwitcher;
+  checkWaf: void;
 };
 
 /**
@@ -97,6 +99,21 @@ export const test = base.extend<PageObjectFixtures>({
   storeSwitcher: async ({ page }, use) => {
     await use(new StoreSwitcher(page));
   },
+
+  checkWaf: [
+    async ({ page }, use) => {
+      await checkCloudflareWaf(page);
+      try {
+        await use();
+      } catch (error) {
+        await checkCloudflareWaf(page);
+        throw error;
+      } finally {
+        await checkCloudflareWaf(page);
+      }
+    },
+    { auto: true },
+  ],
 });
 
 export { expect };

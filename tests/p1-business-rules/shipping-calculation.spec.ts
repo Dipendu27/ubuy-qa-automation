@@ -7,10 +7,9 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import { CartPage } from '../../src/pages/CartPage.js';
 import { env } from '../../src/config/env.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
-import addressesData from '../../src/fixtures/test-data/addresses.json' assert { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
+import addressesData from '../../src/fixtures/test-data/addresses.json' with { type: 'json' };
 
 test.describe('Shipping Calculation — P1 Business Rules', () => {
   const testProduct = productsData.products[0];

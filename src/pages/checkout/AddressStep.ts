@@ -90,7 +90,7 @@ export class AddressStep {
 
   /** Assert no deliverability error is shown (serviceable address) */
   async expectNoDeliverabilityError(): Promise<void> {
-    await expect(this.deliverabilityError).not.toBeVisible();
+    await expect(this.deliverabilityError).toBeHidden();
   }
 
   /** Assert validation errors are shown */

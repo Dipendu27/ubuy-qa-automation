@@ -15,16 +15,7 @@ import { throttle } from '../utils/throttle.js';
 
 /** Available store regions */
 export type StoreRegion =
-  | 'Global'
-  | 'US'
-  | 'UK'
-  | 'EU'
-  | 'India'
-  | 'Hongkong'
-  | 'China'
-  | 'Japan'
-  | 'Korea'
-  | 'Turkey';
+  'Global' | 'US' | 'UK' | 'EU' | 'India' | 'Hongkong' | 'China' | 'Japan' | 'Korea' | 'Turkey';
 
 export class StoreSwitcher {
   readonly page: Page;

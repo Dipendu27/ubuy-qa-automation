@@ -7,8 +7,8 @@
  * - Cancelling preserves the cart
  */
 
-import { test, expect } from '../../src/fixtures/base.fixture.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import { test } from '../../src/fixtures/base.fixture.js';
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Store Switcher — P1 Business Rules', () => {
   const testProduct = productsData.products[0];

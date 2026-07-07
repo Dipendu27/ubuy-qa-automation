@@ -2,24 +2,24 @@
   "products": [
     {
       "name": "HP OmniBook 3 Laptop",
-      "keyword": "headphones",
+      "keyword": "omnibook",
       "url": "/product/TYIQ75ID2-omnibook-3-17-3-inch-laptop-pc-fhd-display-amd-ryzen-3-30-8-gb-ram-512-gb-ssd-amd-radeon-610m-graphics-windows-11-home-mica-silver-17-dp0199nr",
       "description": "A commonly available laptop product for testing search and PDP flows",
-      "notes": "CONFIRMED: Real product URL from live site discovery"
+      "notes": "UNVERIFIED — heuristic/placeholder, needs live re-check"
     },
     {
-      "name": "Sample Electronics Product",
-      "keyword": "laptop",
-      "url": "/product/TYIQ75ID2-omnibook-3-17-3-inch-laptop-pc-fhd-display-amd-ryzen-3-30-8-gb-ram-512-gb-ssd-amd-radeon-610m-graphics-windows-11-home-mica-silver-17-dp0199nr",
-      "description": "Electronics category product for cart and checkout tests",
-      "notes": "CONFIRMED: Real product URL from live site discovery"
+      "name": "Apple iPhone 15 Pro Max",
+      "keyword": "iphone",
+      "url": "/product/sample-distinct-product-iphone-15-pro",
+      "description": "Distinct electronics product for alternative category tests",
+      "notes": "UNVERIFIED — placeholder, needs live re-check"
     },
     {
       "name": "Out of Stock Product",
       "keyword": "",
       "url": "/product/sample-oos-product",
       "description": "A product confirmed to be out of stock for OOS badge testing",
-      "notes": "PHASE 0: Must find an actual OOS product during discovery"
+      "notes": "UNVERIFIED — placeholder, needs live re-check"
     }
   ],
   "categories": [
@@ -27,13 +27,13 @@
       "name": "Laptops",
       "path": "laptops-21457",
       "url": "/category/laptops-21457",
-      "notes": "CONFIRMED: Real category URL from live site discovery"
+      "notes": "UNVERIFIED — placeholder, needs live re-check"
     },
     {
       "name": "Electronics",
       "path": "electronics-172282",
       "url": "/category/electronics-172282",
-      "notes": "CONFIRMED: Real category URL from live site discovery"
+      "notes": "UNVERIFIED — placeholder, needs live re-check"
     }
   ],
   "brands": [

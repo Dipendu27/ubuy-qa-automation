@@ -41,10 +41,7 @@ test.describe('Navigation — P0 Critical Path', () => {
     });
   });
 
-  test('breadcrumb navigation works on category page', async ({
-    categoryPage,
-    page,
-  }) => {
+  test('breadcrumb navigation works on category page', async ({ categoryPage, page }) => {
     await test.step('Navigate to a category page', async () => {
       // Use verified leaf category URL with ID
       await page.goto('/category/laptops-21457');

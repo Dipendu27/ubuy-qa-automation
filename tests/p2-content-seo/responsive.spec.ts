@@ -5,7 +5,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Responsive Smoke Pass — P2 Content & SEO', () => {
   // Use mobile project or set viewport explicitly if running under desktop project
@@ -26,7 +26,6 @@ test.describe('Responsive Smoke Pass — P2 Content & SEO', () => {
 
   test('PDP renders correctly and allows add-to-cart on mobile viewport', async ({
     productDetailPage,
-    homePage,
     page,
   }) => {
     await test.step('Navigate to PDP on mobile viewport', async () => {

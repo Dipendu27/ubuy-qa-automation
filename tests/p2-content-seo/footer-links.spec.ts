@@ -8,10 +8,7 @@
 import { test, expect } from '../../src/fixtures/base.fixture.js';
 
 test.describe('Footer Links — P2 Content & SEO', () => {
-  test('footer links on homepage do not return 404 or dead links', async ({
-    homePage,
-    page,
-  }) => {
+  test('footer links on homepage do not return 404 or dead links', async ({ homePage, page }) => {
     await test.step('Navigate to homepage', async () => {
       await homePage.goto();
     });

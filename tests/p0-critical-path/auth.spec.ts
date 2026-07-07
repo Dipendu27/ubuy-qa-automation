@@ -10,7 +10,7 @@
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
 import { env } from '../../src/config/env.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Authentication — P0 Critical Path', () => {
   test.describe('Login', () => {
@@ -40,10 +40,15 @@ test.describe('Authentication — P0 Critical Path', () => {
 
     test('login with valid credentials succeeds', async ({ loginPage, page }) => {
       // Skip if no real test credentials configured (detect placeholders)
-      const hasRealCreds = env.testUserEmail && env.testUserPassword &&
+      const hasRealCreds =
+        env.testUserEmail &&
+        env.testUserPassword &&
         !env.testUserEmail.includes('example.com') &&
         !env.testUserPassword.includes('your-test');
-      test.skip(!hasRealCreds, 'Test credentials not configured in .env (placeholder values detected)');
+      test.skip(
+        !hasRealCreds,
+        'Test credentials not configured in .env (placeholder values detected)',
+      );
 
       await test.step('Navigate to login page', async () => {
         await loginPage.goto();
@@ -92,7 +97,9 @@ test.describe('Authentication — P0 Critical Path', () => {
       });
 
       await test.step('Attempt to proceed to checkout', async () => {
-        const checkoutBtnVisible = await cartPage.proceedToCheckoutBtn.isVisible().catch(() => false);
+        const checkoutBtnVisible = await cartPage.proceedToCheckoutBtn
+          .isVisible()
+          .catch(() => false);
         if (checkoutBtnVisible) {
           await cartPage.proceedToCheckout();
         } else {

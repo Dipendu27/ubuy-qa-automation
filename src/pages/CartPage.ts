@@ -50,8 +50,8 @@ export class CartPage {
   /** Assert the cart is empty */
   async expectCartEmpty(): Promise<void> {
     await this.page.waitForTimeout(2000);
-    const qtyCount = await this.lineItems.count();
-    expect(qtyCount).toBe(0);
+    const qtyCount = this.lineItems;
+    await expect(qtyCount).toHaveCount(0);
   }
 
   /** Get the number of line items in the cart */
@@ -76,7 +76,11 @@ export class CartPage {
     await this.page.waitForTimeout(2000);
 
     // Ubuy displays a custom DOM modal dialog asking for removal confirmation
-    const confirmModalBtn = this.page.locator('#ubuy-confirm-modal-btn1:visible, button.btn-primary:has-text("Remove"):visible, .modal button:has-text("Remove"):visible').first();
+    const confirmModalBtn = this.page
+      .locator(
+        '#ubuy-confirm-modal-btn1:visible, button.btn-primary:has-text("Remove"):visible, .modal button:has-text("Remove"):visible',
+      )
+      .first();
     if (await confirmModalBtn.isVisible()) {
       await confirmModalBtn.click();
     }

@@ -11,9 +11,8 @@
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
 import { env } from '../../src/config/env.js';
-import { CartPage } from '../../src/pages/CartPage.js';
-import addressesData from '../../src/fixtures/test-data/addresses.json' assert { type: 'json' };
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import addressesData from '../../src/fixtures/test-data/addresses.json' with { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Checkout Flow — P0 Critical Path', () => {
   const testProduct = productsData.products[0];
@@ -23,7 +22,9 @@ test.describe('Checkout Flow — P0 Critical Path', () => {
   // All checkout tests require authentication
   test.beforeEach(async ({ page, loginPage, productDetailPage }) => {
     // Skip all checkout tests if no real credentials
-    const hasRealCreds = env.testUserEmail && env.testUserPassword &&
+    const hasRealCreds =
+      env.testUserEmail &&
+      env.testUserPassword &&
       !env.testUserEmail.includes('example.com') &&
       !env.testUserPassword.includes('your-test');
     test.skip(!hasRealCreds, 'Test credentials not configured (placeholder values detected)');
@@ -37,10 +38,7 @@ test.describe('Checkout Flow — P0 Critical Path', () => {
     await productDetailPage.addToCart(1);
   });
 
-  test('enter serviceable shipping address and proceed', async ({
-    cartPage,
-    addressStep,
-  }) => {
+  test('enter serviceable shipping address and proceed', async ({ cartPage, addressStep }) => {
     await test.step('Navigate to cart and proceed to checkout', async () => {
       await cartPage.goto();
       await cartPage.proceedToCheckout();
@@ -63,10 +61,7 @@ test.describe('Checkout Flow — P0 Critical Path', () => {
     });
   });
 
-  test('non-serviceable PIN code shows deliverability error', async ({
-    cartPage,
-    addressStep,
-  }) => {
+  test('non-serviceable PIN code shows deliverability error', async ({ cartPage, addressStep }) => {
     await test.step('Navigate to cart and proceed to checkout', async () => {
       await cartPage.goto();
       await cartPage.proceedToCheckout();
@@ -118,7 +113,7 @@ test.describe('Checkout Flow — P0 Critical Path', () => {
       const expressPrices = await shippingStep.getShippingPrices();
 
       // Prices should differ between Standard and Express
-      // (at minimum, one of the displayed prices should change)
+      expect(expressPrices).not.toEqual(standardPrices);
     });
   });
 

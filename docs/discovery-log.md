@@ -1,80 +1,104 @@
 # Phase 0 — Live Site Discovery Log
 
 **Target Site:** https://www.ubuy.co.in/  
-**Document Status:** Placeholder / Initial Audit Template  
-**Purpose:** Record live DOM structure, verify Cloudflare interaction behavior, and confirm exact CSS/DOM selectors for all elements modeled in the framework.
+**Last Updated:** July 2026  
+**Document Status:** Verified Live Audit — Single Source of Truth  
+**Purpose:** Record verified live DOM structure, Cloudflare interaction behavior, and selector confirmation status for elements modeled in the framework.
 
 ---
 
 ## 1. Cloudflare WAF & Bot Protection Observations
 
-| Observation Area | Expected Status (from Recon) | Live Verified Status | Notes / Remediation |
+| Observation Area | Expected Status | Live Verified Status | Notes / Remediation |
 | :--- | :--- | :--- | :--- |
-| **Direct HTTP GET** | Blocked (100% block rate) | *Pending Phase 0* | Requires real browser engine |
-| **Headed Browser Load** | Clears without challenge / low interstitial | *Pending Phase 0* | Playwright Headed Chromium |
-| **Headless Browser Load** | Likely challenged / blocked | *Pending Phase 0* | Avoid headless against prod |
-| **Rate Limiting Threshold** | Sensitive to rapid requests | *Pending Phase 0* | Throttling utility enforced (1-3s delays) |
+| **Direct HTTP GET** | Blocked (100% block rate) | 🛑 **Blocked** | Raw HTTP requests (curl, API fetch) fail WAF checks. Requires real browser engine execution. |
+| **Headed Browser Load** | Clears without challenge | ✅ **Verified Clear** | Playwright Headed Chromium clears WAF reliably without needing third-party evasion plugins. |
+| **Headless Browser Load** | Challenged / blocked | ⚠️ **High Risk** | Headless mode against production is prone to Cloudflare interstitial blocks; headed mode enforced by default. |
+| **Rate Limiting Threshold** | Sensitive to rapid requests | ✅ **Verified Stable** | Throttling utility (`src/utils/throttle.ts`) enforced between actions (1–3s delays) prevents IP rate-limiting. |
 
 ---
 
-## 2. Robots.txt & Sitemap Audit
+## 2. Feature Existence & Architecture Audits (§3.5 Resolution)
 
-* **robots.txt URL:** `https://www.ubuy.co.in/robots.txt`
-* **Sitemap URL:** `https://www.ubuy.co.in/sitemap.xml` / `/html-sitemap/ubuybrands/a`
-* **Findings:** *Pending live browser check.* Ensure no automation scripts hit disallowed admin or system paths.
+During live browser exploration against `www.ubuy.co.in`, the following architectural behaviors and feature states were explicitly verified and resolved:
+
+* **Authentication Architecture (`/customer/account/login`):**
+  * Ubuy does *not* use separate URLs for login and registration. Both reside on `/customer/account/login` using a tabbed interface (`#nav-pass-tab` for login, `#nav-otp-tab` for signup).
+  * Registration uses an **OTP-first flow** (Email → OTP Verification → Password setup). Initial form rendering exposes only the email input and submit button; password fields remain hidden until OTP completion.
+  * Verified Login selectors: `#login_username` (instead of standard `email`), `#login.password`, `#login-form-btn`, and error container `div.error.text-danger`.
+* **Cart & Modal Removal Behavior (`/ubcheckout/cart`):**
+  * Clicking an item's remove link (`a:has(img[alt="delete"])`) triggers a custom DOM confirmation modal rather than a standard JavaScript dialog alert.
+  * `CartPage.removeItem()` was refactored to explicitly click `#ubuy-confirm-modal-btn1` inside the modal and wait for DOM re-evaluation.
+* **Wishlist & Compare Features:**
+  * Audited live storefront; standalone guest wishlist/compare functionality is **absent** from primary navigation and product grids on `ubuy.co.in`.
+  * *Resolution:* Correctly excluded from Page Object modeling.
+* **Cart Promo / Coupon Input:**
+  * Standalone coupon application box on the initial guest cart page is **absent** (promotions are applied during checkout payment review).
+  * *Resolution:* `CartPage.couponInput` and `applyCouponBtn` are retained as defensive heuristic fallbacks marked `UNVERIFIED`.
+* **Account & Tracking Routes:**
+  * `MyAccountPage` (`/customer/account/`) and Order History tracking (`/sales/order/track/`) use Magento/Ubuy standard route conventions.
+  * *Resolution:* Marked `UNVERIFIED — fallback route, needs live re-check` until authenticated staging/prod account testing is executed.
+* **Navigation & Grid Clicks:**
+  * To prevent JS overlay interference and `target="_blank"` popup interception, navigation from category product grids to Product Detail Pages (PDP) is performed via direct `page.goto(href)` extraction.
 
 ---
 
 ## 3. Selector Confirmation Audit Table
 
-Every locator in `src/locators/*.ts` must be audited against the live site and marked as confirmed below.
+Per framework rigor standards (§3.3), every selector category modeled in `src/locators/*.ts` is tracked below. Selectors without standalone dedicated screenshot/trace evidence files in the commit are tagged `🔶 UNVERIFIED (heuristic fallback selector)` in code, even when validated during live end-to-end test execution.
 
 ### Homepage (`src/locators/home.locators.ts`)
-| Element | Proposed Placeholder Selector | Confirmed Live Selector | Status |
+| Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Header Container | `header, [role="banner"]` | | ⚠️ UNCONFIRMED |
-| Search Input | `input[name="q"], input[type="search"]` | | ⚠️ UNCONFIRMED |
-| Cart Icon | `a[href*="cart"], .minicart-wrapper a` | | ⚠️ UNCONFIRMED |
-| Store Switcher Trigger | `[data-store-switcher], .store-switcher`| | ⚠️ UNCONFIRMED |
-| Store Confirm Modal | `.modal-popup, [role="dialog"]` | | ⚠️ UNCONFIRMED |
+| Header Container | `header.main-header, [role="banner"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Search Input | `input[name="q"], input[type="search"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Cart Icon | `a[href*="cart"]:visible, .minicart-wrapper a` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Store Switcher | `.store-switcher, [data-store-switcher]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Store Modal | `.modal-popup, [role="dialog"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
 
 ### Search Results (`src/locators/search.locators.ts`)
-| Element | Proposed Placeholder Selector | Confirmed Live Selector | Status |
+| Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Results Container | `.search-results, .products-grid` | | ⚠️ UNCONFIRMED |
-| Result Item | `.product-item, .product-card` | | ⚠️ UNCONFIRMED |
-| Empty State Message | `.message.notice, .search-no-results` | | ⚠️ UNCONFIRMED |
+| Results Grid | `.products-grid, .search-results:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Result Item | `.product-item:visible, .product-card:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Empty State | `.message.notice, .search-no-results:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
 
-### PDP (`src/locators/pdp.locators.ts`)
-| Element | Proposed Placeholder Selector | Confirmed Live Selector | Status |
+### Product Detail Page (`src/locators/pdp.locators.ts`)
+| Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Product Title | `h1.page-title, h1[itemprop="name"]` | | ⚠️ UNCONFIRMED |
-| Add to Cart CTA | `#product-addtocart-button` | | ⚠️ UNCONFIRMED |
-| Stock Badge | `.stock.available, [data-stock-status]`| | ⚠️ UNCONFIRMED |
+| Product Title | `h1:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Add to Cart CTA | `#product-addtocart-button, button:has-text("Add to Cart")` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Stock Badge | `.stock.available, [data-stock-status]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
 
 ### Cart (`src/locators/cart.locators.ts`)
-| Element | Proposed Placeholder Selector | Confirmed Live Selector | Status |
+| Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Cart Container | `.cart-container, #shopping-cart-table` | | ⚠️ UNCONFIRMED |
-| Line Item Qty | `input[name*="qty"], input.qty` | | ⚠️ UNCONFIRMED |
-| Proceed CTA | `button[data-role="proceed-to-checkout"]`| | ⚠️ UNCONFIRMED |
+| Cart Table / Item | `.cart-container, #shopping-cart-table` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Remove Modal Btn | `#ubuy-confirm-modal-btn1` | 🔶 UNVERIFIED (heuristic fallback) | Verified during modal refactor |
+| Proceed CTA | `button[data-role="proceed-to-checkout"]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+
+### Authentication (`src/locators/account.locators.ts`)
+| Element | Primary Live Selector | Code Confidence Tag | Status |
+| :--- | :--- | :--- | :--- |
+| Login Username | `#login_username` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
+| Login Password | `#login\\.password` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
+| Login Submit Btn | `#login-form-btn` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
+| Error Container | `div.error.text-danger` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
+| Sign Up Tab | `#nav-otp-tab` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
 
 ### Checkout Flow (`src/locators/checkout.locators.ts`)
-| Step / Element | Proposed Placeholder Selector | Confirmed Live Selector | Status |
+| Step / Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Address Step Container | `#checkout-step-shipping` | | ⚠️ UNCONFIRMED |
-| Shipping Step Container| `#checkout-step-shipping_method` | | ⚠️ UNCONFIRMED |
-| Payment Step Container | `#checkout-step-payment` | | ⚠️ UNCONFIRMED |
-| **Place Order CTA** | `button[title="Place Order"]` | **NEVER CLICK — STOP BEFORE SUBMISSION** | 🛑 ENFORCED |
+| Address Container | `#checkout-step-shipping, .checkout-shipping-address` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Shipping Options | `#checkout-step-shipping_method, input[value*="standard" i]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Payment Review | `#checkout-step-payment, .opc-block-summary` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| **Place Order CTA** | `button[title="Place Order"]` | **NEVER CLICK — STOP BEFORE SUBMISSION** | 🛑 ENFORCED (§5.1) |
 
 ---
 
-## 4. Next Steps for Phase 0 Execution
+## 4. Selector Rigor & Evidence Policy
 
-1. Run the headed browser exploration session:
-   ```bash
-   npx playwright test --headed
-   ```
-2. Inspect live DOM elements using Playwright Inspector or Chrome DevTools.
-3. Replace placeholder selectors in `src/locators/*.ts` with live verified selectors.
-4. Update this document with confirmed findings and change status tags to `✅ CONFIRMED`.
+When adding new selectors or promoting an element from `🔶 UNVERIFIED` to `✅ CONFIRMED`, engineers must:
+1. Capture an evidence artifact: a dated screenshot (`.png`) or Playwright trace (`.zip`) stored under `docs/evidence/`.
+2. Reference the artifact filename directly in the corresponding table row in this document.
+3. Update the inline comment tag in the locator file (`src/locators/*.ts`) to `// ✅ CONFIRMED (see docs/evidence/filename.png)`.

@@ -80,6 +80,6 @@ export class HomePage {
 
   /** Get the current cart badge count text */
   async getCartCount(): Promise<string> {
-    return await this.cartBadgeCount.textContent() ?? '0';
+    return (await this.cartBadgeCount.textContent()) ?? '0';
   }
 }

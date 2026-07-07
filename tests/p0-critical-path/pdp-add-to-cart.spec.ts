@@ -8,7 +8,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('PDP Add to Cart — P0 Critical Path', () => {
   const testProduct = productsData.products[0];
@@ -37,11 +37,7 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
     });
   });
 
-  test('add product to cart and verify cart badge updates', async ({
-    homePage,
-    productDetailPage,
-    page,
-  }) => {
+  test('add product to cart and verify cart badge updates', async ({ productDetailPage, page }) => {
     await test.step('Navigate to a product page', async () => {
       await page.goto(testProduct.url);
     });
@@ -56,7 +52,11 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
 
     await test.step('Verify cart badge count updated', async () => {
       // Wait for cart counter to update (AJAX)
-      const cartBadge = page.locator('.show-cart-popup:visible, [class*="cart-counter" i]:visible, [class*="cart-qty" i]:visible').first();
+      const cartBadge = page
+        .locator(
+          '.show-cart-popup:visible, [class*="cart-counter" i]:visible, [class*="cart-qty" i]:visible',
+        )
+        .first();
       await expect(cartBadge).toBeVisible({ timeout: 10_000 });
     });
   });
@@ -72,7 +72,11 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
 
     await test.step('Verify cart popup or success indicator', async () => {
       // After adding to cart, ubuy shows a cart popup
-      const cartPopup = page.locator('.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible').first();
+      const cartPopup = page
+        .locator(
+          '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible',
+        )
+        .first();
       await expect(cartPopup).toBeVisible({ timeout: 10_000 });
     });
   });

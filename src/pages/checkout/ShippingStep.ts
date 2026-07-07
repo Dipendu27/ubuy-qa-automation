@@ -69,7 +69,6 @@ export class ShippingStep {
 
   /** Assert the selected shipping price changed after switching methods */
   async expectPriceChanged(previousPrice: string): Promise<void> {
-    const currentPrices = await this.getShippingPrices();
     const selectedPrice = this.page.locator(checkoutLocators.shipping.selectedMethodPrice).first();
     const currentText = (await selectedPrice.textContent()) ?? '';
     expect(currentText.trim()).not.toEqual(previousPrice.trim());

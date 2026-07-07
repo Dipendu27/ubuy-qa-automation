@@ -7,7 +7,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import keywordsData from '../../src/fixtures/test-data/keywords.json' assert { type: 'json' };
+import keywordsData from '../../src/fixtures/test-data/keywords.json' with { type: 'json' };
 
 test.describe('Search — P0 Critical Path', () => {
   test.beforeEach(async ({ homePage }) => {

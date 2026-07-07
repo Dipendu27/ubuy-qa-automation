@@ -9,7 +9,7 @@
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
 import { CartPage } from '../../src/pages/CartPage.js';
-import productsData from '../../src/fixtures/test-data/products.json' assert { type: 'json' };
+import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Cart — P0 Critical Path', () => {
   const testProduct = productsData.products[0];
