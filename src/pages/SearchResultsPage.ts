@@ -76,6 +76,7 @@ export class SearchResultsPage {
 
   /** Navigate to the next page of results */
   async goToNextPage(): Promise<void> {
+    // eslint-disable-next-line playwright/prefer-locator
     await this.nextPage.click();
     await throttle();
   }

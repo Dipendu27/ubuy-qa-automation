@@ -49,7 +49,10 @@ export class ProductDetailPage {
   /** Set the quantity in the quantity input */
   async setQuantity(quantity: number): Promise<void> {
     if (quantity === 1) return; // Default quantity is 1 on PDP
+    // force: true needed due to mobile layout overlay/styling interception per discovery log
+    // eslint-disable-next-line playwright/no-force-option
     await this.quantityInput.clear({ force: true });
+    // eslint-disable-next-line playwright/no-force-option
     await this.quantityInput.fill(String(quantity), { force: true });
   }
 

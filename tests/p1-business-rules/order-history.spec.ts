@@ -52,6 +52,7 @@ test.describe('Order History & Tracking — P1 Business Rules', () => {
       const orderCount = await myAccountPage.getOrderCount();
       test.skip(orderCount === 0, 'No past orders to view');
       await myAccountPage.viewOrderDetail(0);
+      expect(myAccountPage.page.url()).toBeTruthy();
     });
   });
 

@@ -20,6 +20,7 @@ test.describe('Shipping Calculation — P1 Business Rules', () => {
     cartPage,
     loginPage,
     addressStep,
+    shippingStep,
     page,
   }) => {
     const hasRealCreds =
@@ -66,8 +67,7 @@ test.describe('Shipping Calculation — P1 Business Rules', () => {
     await test.step('Verify shipping costs differ with increased basket size', async () => {
       // Shipping should scale with basket — the prices should be different
       // (in most cases, more items = higher shipping)
-      expect(shippingPricesWith1Item).toBeDefined();
-      expect(shippingPricesWith4Items).toBeDefined();
+      expect(shippingPricesWith4Items).not.toEqual(shippingPricesWith1Item);
     });
   });
 });

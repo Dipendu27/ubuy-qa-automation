@@ -49,9 +49,8 @@ export class CartPage {
 
   /** Assert the cart is empty */
   async expectCartEmpty(): Promise<void> {
-    await this.page.waitForTimeout(2000);
     const qtyCount = this.lineItems;
-    await expect(qtyCount).toHaveCount(0);
+    await expect(qtyCount).toHaveCount(0, { timeout: 10000 });
   }
 
   /** Get the number of line items in the cart */
@@ -73,6 +72,8 @@ export class CartPage {
   async removeItem(itemIndex: number): Promise<void> {
     const removeBtn = this.page.locator(cartLocators.lineItemRemove).nth(itemIndex);
     await removeBtn.click();
+    // Wait for custom removal modal animation to appear
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(2000);
 
     // Ubuy displays a custom DOM modal dialog asking for removal confirmation
@@ -85,7 +86,8 @@ export class CartPage {
       await confirmModalBtn.click();
     }
 
-    // Wait for page to reload/update after removal
+    // Wait for page AJAX transition before reloading
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(3000);
     await this.page.reload({ waitUntil: 'domcontentloaded' });
     await throttle(2000, 4000);
