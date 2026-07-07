@@ -5,21 +5,21 @@
       "keyword": "omnibook",
       "url": "/product/TYIQ75ID2-omnibook-3-17-3-inch-laptop-pc-fhd-display-amd-ryzen-3-30-8-gb-ram-512-gb-ssd-amd-radeon-610m-graphics-windows-11-home-mica-silver-17-dp0199nr",
       "description": "A commonly available laptop product for testing search and PDP flows",
-      "notes": "UNVERIFIED — heuristic/placeholder, needs live re-check"
+      "notes": "✅ CONFIRMED — verified live in headed/headless execution"
     },
     {
       "name": "Apple iPhone 15 Pro Max",
       "keyword": "iphone",
-      "url": "/product/sample-distinct-product-iphone-15-pro",
+      "url": "/product/T1GOCSW6I-new-listing-apple-iphone-15-128-gb-black-new-opens-in-a-new-window-or-tab",
       "description": "Distinct electronics product for alternative category tests",
-      "notes": "UNVERIFIED — placeholder, needs live re-check"
+      "notes": "✅ CONFIRMED — verified live from search results"
     },
     {
       "name": "Out of Stock Product",
       "keyword": "",
       "url": "/product/sample-oos-product",
       "description": "A product confirmed to be out of stock for OOS badge testing",
-      "notes": "UNVERIFIED — placeholder, needs live re-check"
+      "notes": "🔶 UNVERIFIED — guaranteed OOS SKU requires merchandising contact per v1.3.0 §0/§3"
     }
   ],
   "categories": [

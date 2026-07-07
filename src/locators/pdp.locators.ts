@@ -1,19 +1,19 @@
 /**
  * Product Detail Page (PDP) locators.
  *
- * PHASE 0 STATUS: Updated with verified selectors from live site discovery.
+ * PHASE 0 STATUS: Partially verified via live execution; individual selectors tagged with current evidence status.
  */
 
 export const pdpLocators = {
   // --- Core Product Info ---
-  productTitle: 'h1:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-  productPrice: '.price-box:visible, [class*="price" i]:has-text("INR"):visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+  productTitle: 'h1:visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
+  productPrice: '.price-box:visible, [class*="price" i]:has-text("INR"):visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
   originalPrice: '.old-price .price:visible, [data-price-type="oldPrice"] .price:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
   discountBadge: '.discount-label, .savings-percent', // 🔶 UNVERIFIED (heuristic fallback selector)
 
   // --- Gallery ---
   mainImage:
-    '.zoom-container img.zoom-image:visible, .zoom-image:visible, .gallery-placeholder img:visible, .fotorama__active img:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    '.zoom-container img.zoom-image:visible, .zoom-image:visible, .gallery-placeholder img:visible, .fotorama__active img:visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
   thumbnails: '.fotorama__nav__frame img, .product-thumbs img', // 🔶 UNVERIFIED (heuristic fallback selector)
 
   // --- Variants ---
@@ -23,13 +23,13 @@ export const pdpLocators = {
   sizeSelector: '.swatch-attribute.size .swatch-option, select[aria-label*="size" i]', // 🔶 UNVERIFIED (heuristic fallback selector)
 
   // --- Quantity & Add to Cart ---
-  quantityInput: 'input#qty:visible, input[name="qty"]:visible, input[type="number"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+  quantityInput: 'input#qty:visible, input[name="qty"]:visible, input[type="number"]:visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
   quantityIncrement: 'button[title="Increase"], .qty-increment, button:has-text("+")', // 🔶 UNVERIFIED (heuristic fallback selector)
   quantityDecrement: 'button[title="Decrease"], .qty-decrement, button:has-text("-")', // 🔶 UNVERIFIED (heuristic fallback selector)
   addToCartBtn:
-    'button#add-to-cart-btn:visible, button.add-to-cart-btn:visible, button:has-text("Add to cart"):visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    'button#add-to-cart-btn:visible, button.add-to-cart-btn:visible, button:has-text("Add to cart"):visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
   addToCartSuccess:
-    '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible, [data-ui-id="message-success"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible, [data-ui-id="message-success"]:visible', // ✅ CONFIRMED (verified via pdp-add-to-cart.spec.ts live execution)
 
   // --- Stock ---
   stockBadge:

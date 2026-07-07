@@ -50,24 +50,24 @@ Per framework rigor standards (§3.3), every selector category modeled in `src/l
 ### Homepage (`src/locators/home.locators.ts`)
 | Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Header Container | `header.main-header, [role="banner"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Search Input | `input[name="q"], input[type="search"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Cart Icon | `a[href*="cart"]:visible, .minicart-wrapper a` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Store Switcher | `.store-switcher, [data-store-switcher]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Store Modal | `.modal-popup, [role="dialog"]:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Header Container | `header.main-header, [role="banner"]:visible` | ✅ CONFIRMED (see docs/evidence/homepage-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Search Input | `input[name="q"], input[type="search"]:visible` | ✅ CONFIRMED (see docs/evidence/homepage-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Cart Icon | `a[href*="cart"]:visible, .minicart-wrapper a` | ✅ CONFIRMED (see docs/evidence/homepage-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Store Switcher | `.store-switcher, [data-store-switcher]` | ✅ CONFIRMED (see docs/evidence/homepage-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Store Modal | `.modal-popup, [role="dialog"]:visible` | ✅ CONFIRMED (see docs/evidence/homepage-verified.png) | ✅ Verified via live E2E test suite & screenshot |
 
 ### Search Results (`src/locators/search.locators.ts`)
 | Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Results Grid | `.products-grid, .search-results:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Result Item | `.product-item:visible, .product-card:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Empty State | `.message.notice, .search-no-results:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Results Grid | `.products-grid, .search-results:visible` | ✅ CONFIRMED (see docs/evidence/search-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Result Item | `.product-item:visible, .product-card:visible` | ✅ CONFIRMED (see docs/evidence/search-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Empty State | `.message.notice, .search-no-results:visible` | ✅ CONFIRMED (see docs/evidence/search-verified.png) | ✅ Verified via live E2E test suite & screenshot |
 
 ### Product Detail Page (`src/locators/pdp.locators.ts`)
 | Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Product Title | `h1:visible` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Add to Cart CTA | `#product-addtocart-button, button:has-text("Add to Cart")` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Product Title | `h1:visible` | ✅ CONFIRMED (see docs/evidence/pdp-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Add to Cart CTA | `#product-addtocart-button, button:has-text("Add to Cart")` | ✅ CONFIRMED (see docs/evidence/pdp-verified.png) | ✅ Verified via live E2E test suite & screenshot |
 | Stock Badge | `.stock.available, [data-stock-status]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
 
 ### Cart (`src/locators/cart.locators.ts`)
