@@ -1,0 +1,43 @@
+{
+  "serviceable": [
+    {
+      "label": "Mumbai serviceable address",
+      "firstName": "Test",
+      "lastName": "User",
+      "street1": "123 Test Street",
+      "street2": "Apt 4B",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "postalCode": "400001",
+      "country": "India",
+      "phone": "9876543210",
+      "notes": "Known serviceable PIN code for Mumbai"
+    },
+    {
+      "label": "Delhi serviceable address",
+      "firstName": "QA",
+      "lastName": "Automation",
+      "street1": "456 Automation Lane",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "postalCode": "110001",
+      "country": "India",
+      "phone": "9876543211",
+      "notes": "Known serviceable PIN code for Delhi"
+    }
+  ],
+  "nonServiceable": [
+    {
+      "label": "Non-serviceable remote address",
+      "firstName": "Test",
+      "lastName": "NoDelivery",
+      "street1": "789 Remote Area",
+      "city": "Remote Village",
+      "state": "Andaman and Nicobar Islands",
+      "postalCode": "744101",
+      "country": "India",
+      "phone": "9876543212",
+      "notes": "PHASE 0: Verify this PIN code actually fails deliverability check. If not, find a non-serviceable PIN via live testing."
+    }
+  ]
+}

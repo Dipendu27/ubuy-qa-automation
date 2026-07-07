@@ -1,0 +1,35 @@
+{
+  "validKeywords": [
+    {
+      "keyword": "headphones",
+      "description": "Common electronics product, should return many results"
+    },
+    {
+      "keyword": "laptop",
+      "description": "Popular search term with broad results"
+    },
+    {
+      "keyword": "iPhone",
+      "description": "Brand-specific search for Apple products"
+    },
+    {
+      "keyword": "shoes",
+      "description": "Fashion category search term"
+    },
+    {
+      "keyword": "watch",
+      "description": "Cross-category term (electronics + fashion)"
+    }
+  ],
+  "invalidKeywords": [
+    {
+      "keyword": "xyzqwerty123456nonsense",
+      "description": "Guaranteed no-match string for empty-state testing"
+    },
+    {
+      "keyword": "asdfjklzxcvbnm9876",
+      "description": "Another nonsense keyword for empty-state verification"
+    }
+  ],
+  "emptyStateMessage": "Your search keyword did not match any product, try using different keyword."
+}
