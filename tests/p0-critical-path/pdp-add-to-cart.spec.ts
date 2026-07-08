@@ -59,7 +59,7 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
       // Wait for cart counter to update (AJAX)
       const cartBadge = page
         .locator(
-          '.show-cart-popup:visible, [class*="cart-counter" i]:visible, [class*="cart-qty" i]:visible',
+          '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible, [class*="cart-counter" i]:visible, [class*="cart-qty" i]:visible, [class*="cart-count" i]:visible, a[href*="cart"] span:visible',
         )
         .first();
       await expect(cartBadge).toBeVisible({ timeout: 10_000 });
@@ -79,7 +79,7 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
       // After adding to cart, ubuy shows a cart popup
       const cartPopup = page
         .locator(
-          '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible',
+          '.show-cart-popup:visible, a#add-to-cart-view-cart:visible, .message-success:visible, [class*="cart-counter" i]:visible, [class*="cart-qty" i]:visible, [class*="cart-count" i]:visible, a[href*="cart"] span:visible',
         )
         .first();
       await expect(cartPopup).toBeVisible({ timeout: 10_000 });

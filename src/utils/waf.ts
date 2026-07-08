@@ -30,7 +30,35 @@ export async function checkCloudflareWaf(page: Page): Promise<void> {
     if (challengeCount > 0) {
       test.skip(true, 'environment-blocked-by-waf');
     }
+
+    await dismissCookieBanner(page);
   } catch {
     // Ignore errors when page/browser context is closed or during rapid navigation
+  }
+}
+
+/**
+ * Dismisses site-wide cookie consent banners (#notice-cookie-block) that
+ * overlay mobile/desktop viewports and intercept pointer events during click actions.
+ */
+export async function dismissCookieBanner(page: Page): Promise<void> {
+  try {
+    if (page.isClosed()) {
+      return;
+    }
+    await page
+      .evaluate(() => {
+        const banners = document.querySelectorAll(
+          '#notice-cookie-block, .notice-cookie, [id*="cookie-block"]',
+        );
+        Array.from(banners).forEach((el) => {
+          const elem = el as HTMLElement;
+          elem.style.setProperty('display', 'none', 'important');
+          elem.style.setProperty('pointer-events', 'none', 'important');
+        });
+      })
+      .catch(() => {});
+  } catch {
+    // Ignore navigation or context destroyed errors
   }
 }

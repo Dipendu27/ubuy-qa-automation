@@ -102,6 +102,20 @@ export const test = base.extend<PageObjectFixtures>({
 
   checkWaf: [
     async ({ page }, use) => {
+      await page
+        .addInitScript(() => {
+          const style = document.createElement('style');
+          style.innerHTML =
+            '#notice-cookie-block, .notice-cookie, [id*="cookie-block"] { display: none !important; pointer-events: none !important; }';
+          if (document.head) {
+            document.head.appendChild(style);
+          } else {
+            document.addEventListener('DOMContentLoaded', () => {
+              document.head?.appendChild(style);
+            });
+          }
+        })
+        .catch(() => {});
       await checkCloudflareWaf(page);
       try {
         await use();
