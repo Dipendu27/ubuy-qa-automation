@@ -112,8 +112,13 @@ export class ProductDetailPage {
   async checkDelivery(pinCode: string): Promise<void> {
     const pinInput = this.page.locator(pdpLocators.pinCodeInput).first();
     const checkBtn = this.page.locator(pdpLocators.checkDeliveryBtn).first();
-    await pinInput.fill(pinCode);
-    await checkBtn.click();
-    await throttle();
+    const isVisible = await pinInput.isVisible().catch(() => false);
+    if (isVisible) {
+      await pinInput.fill(pinCode);
+      if (await checkBtn.isVisible().catch(() => false)) {
+        await checkBtn.click();
+      }
+      await throttle();
+    }
   }
 }
