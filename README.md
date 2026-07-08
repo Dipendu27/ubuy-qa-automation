@@ -46,24 +46,24 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v1.5.0 Key Capabilities
+## 🌟 Release v1.7.0 Key Capabilities & Architectural Pillars
 
-Release `v1.5.0` introduces four advanced SDET architectural pillars to enhance reliability and observability:
+Release `v1.7.0` strengthens repository integrity, verification rigor, and self-healing automation across our 59-test suite:
 
-- **⚡ Automated Core Web Vitals Performance Budgeting (`src/utils/performance.ts`)**: Collects real-time navigation timings (`TTFB`, `DOM Content Loaded`, `Load Event`, `First Contentful Paint`) via runtime evaluation and asserts compliance with page load budgets.
-- **📡 Network Interception & API Contract Checking (`src/utils/apiSchema.ts`)**: Intercepts AJAX search and cart endpoints to validate HTTP status codes ($\ge 200$), proper JSON headers, and payload schema integrity.
-- **📦 Dynamic Inventory Discovery (`src/utils/productDiscovery.ts`)**: Crawls live product grids at runtime to resolve active in-stock SKU URLs, immunizing tests against static catalog obsolescence.
-- **🌐 Cross-Border Store Switcher & Currency Auditing**: Validates store selector behavior and cart item persistence across regional catalogs.
-- **♿ Automated Accessibility (`@axe-core/playwright`)**: Scans critical P0 pages (`Homepage`, `Search Results`, `PDP`, `Cart`) for WCAG accessibility compliance during test execution.
+- **📋 Standing Verification Rigor Enforcement (§6.7)**: Hardcodes our zero-fabrication verification policy across documentation and tests. Any task gated on human verification stays visibly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or human confirmation is provided.
+- **⚡ Deduplicated Self-Healing Out-of-Stock Discovery (`src/utils/productDiscovery.ts`)**: Crawls live listings dynamically at runtime (`findCurrentOosProduct`) and hoists discovery into a shared `beforeAll` fixture setup, reducing production network traffic while making OOS tests self-healing against inventory fluctuations.
+- **📡 Conscious Network Interception Scope (`src/utils/apiSchema.ts`)**: Formally includes passive network contract validation on UI-triggered AJAX endpoints (`/search/`), asserting valid HTTP status ($\ge 200$) and JSON headers during genuine user interactions.
+- **⚡ Core Web Vitals Performance Budgeting (`src/utils/performance.ts`)**: Collects real-time navigation timings (`TTFB`, `DOM Content Loaded`, `Load Event`, `First Contentful Paint`) and enforces non-breaking performance budgets across critical P0 pages.
+- **♿ Automated Accessibility Scans (`@axe-core/playwright`)**: Scans core user flows (`Homepage`, `Search Results`, `PDP`, `Cart`) for WCAG accessibility compliance.
 
 ---
 
 ## 📊 Comprehensive Test Matrix & Live Runtime Status
 
-Our live verification suite consists of **59 tests** distributed across **14 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
+Our verification suite consists of **59 tests** distributed across **14 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
 
 ```
-  48 active tests passed (100% Pass Rate across all guest & v1.5.0 enhancement flows)
+  48 active tests passed (100% Pass Rate across all guest & dynamic inventory flows)
   11 skipped cleanly (awaiting dedicated test account credentials per prompt §2)
    0 failed
 ```
@@ -79,14 +79,14 @@ Our live verification suite consists of **59 tests** distributed across **14 spe
 | **P0** | `navigation.spec.ts` | Category Grid Clickability, Breadcrumb Navigation | 2 | 2 | 0 | ✅ **PASS** |
 | **P0** | `pdp-add-to-cart.spec.ts` | PDP Core Elements, Add to Cart Badge, Rapid Double-Click Safety | 5 | 5 | 0 | ✅ **PASS** |
 | **P0** | `search.spec.ts` | Broad Keyword Search, Nonsense Search Empty State, XSS Input Safety | 4 | 4 | 0 | ✅ **PASS** |
-| **P1** | `api-contracts.spec.ts` | **(v1.5.0)** Search Autocomplete AJAX Contract Verification | 1 | 1 | 0 | ✅ **PASS** |
+| **P1** | `api-contracts.spec.ts` | Search Autocomplete AJAX Contract Verification | 1 | 1 | 0 | ✅ **PASS** |
 | **P1** | `order-history.spec.ts` | My Account Order List, Order Detail View, Tracking Error State | 3 | 0 | 3 | ⏸️ **SKIP** |
-| **P1** | `out-of-stock.spec.ts` | Out-of-Stock Badge Rendering, Disabled Add-to-Cart Button | 2 | 0 | 2 | ⏸️ **SKIP** |
+| **P1** | `out-of-stock.spec.ts` | **(v1.7.0)** Dynamic Self-Healing OOS Discovery & CTA Disabled Check | 2 | 0 | 2 | ⏸️ **SKIP** |
 | **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | 1 | 1 | ✅ **PASS** |
-| **P1** | `store-switcher.spec.ts` | Cross-Border Cart Preservation, Switch Confirmation Modal | 3 | 3 | 0 | ✅ **PASS** |
-| **P1** | `store-switcher-currency.spec.ts` | **(v1.5.0)** Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
+| **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED cart preservation pending human check`) | 3 | 3 | 0 | ✅ **PASS** |
+| **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | 1 | 0 | ✅ **PASS** |
-| **P2** | `performance.spec.ts` | **(v1.5.0)** Homepage & PDP Core Web Vitals Navigation Timings | 2 | 2 | 0 | ✅ **PASS** |
+| **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings | 2 | 2 | 0 | ✅ **PASS** |
 | **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification (Homepage, PDP, Cart) | 3 | 3 | 0 | ✅ **PASS** |
 | **P2** | `static-pages.spec.ts` | About Us, Contact, FAQ, Terms, Shipping, Warranty, ISO, App, Reviews | 10 | 10 | 0 | ✅ **PASS** |
 | **TOTAL** | **14 Spec Files** | **Complete Production E2E Coverage** | **59** | **48** | **11** | **100% Pass** |
@@ -98,14 +98,17 @@ Our live verification suite consists of **59 tests** distributed across **14 spe
 ```text
 ubuy-qa-automation/
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v1.5.0 version declaration
+├── package.json                # Scripts, dependencies, and v1.7.0 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
 │   └── enforce-no-place-order.mjs  # Load-bearing CI safety guardrail script
 ├── docs/                       # Comprehensive documentation & release notes
+│   ├── discovery-log.md        # Live site discovery log & Standing Verification Rigor Rule (§6.7)
 │   ├── RELEASE_v1.4.0.md       # Release v1.4.0 publication notes
-│   └── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
+│   ├── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
+│   ├── RELEASE_v1.6.0.md       # Release v1.6.0 publication notes
+│   └── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry
