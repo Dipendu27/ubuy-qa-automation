@@ -31,8 +31,11 @@ export async function discoverProductUrlsFromGrid(
     const href = await link.getAttribute('href').catch(() => null);
     const title = (await link.textContent().catch(() => ''))?.trim() ?? 'Unknown Product';
 
-    if (href && href.includes('/product/') && !discovered.some((p) => p.url === href)) {
-      discovered.push({ title, url: href });
+    if (href && href.includes('/product/')) {
+      const normalizedUrl = href.startsWith('/') ? `${new URL(page.url()).origin}${href}` : href;
+      if (!discovered.some((p) => p.url === normalizedUrl)) {
+        discovered.push({ title, url: normalizedUrl });
+      }
     }
   }
 
