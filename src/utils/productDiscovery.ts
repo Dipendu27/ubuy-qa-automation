@@ -42,3 +42,41 @@ export async function discoverProductUrlsFromGrid(
   logger.info('ProductDiscovery', `Discovered ${discovered.length} live product URLs`);
   return discovered;
 }
+
+/**
+ * Dynamically discover an Out-of-Stock (OOS) product URL from search/category listings.
+ * Returns null if all discovered items are currently in stock.
+ */
+export async function findCurrentOosProduct(
+  page: Page,
+  searchKeyword = 'discontinued clearance',
+): Promise<DiscoveredProduct | null> {
+  logger.info(
+    'ProductDiscovery',
+    `Searching for dynamic OOS product with keyword: "${searchKeyword}"`,
+  );
+
+  await page.goto(`https://www.ubuy.co.in/search/?q=${encodeURIComponent(searchKeyword)}`);
+
+  // Look for product cards or badges indicating out of stock status
+  const oosCard = page
+    .locator(
+      '.product-item:has(.out-of-stock, .sold-out, [data-stock="out_of_stock"], :text("Out of Stock")), .product-card:has(:text("Out of Stock"))',
+    )
+    .first();
+
+  if (await oosCard.isVisible().catch(() => false)) {
+    const link = oosCard.locator('a[href*="/product/"]').first();
+    const href = await link.getAttribute('href').catch(() => null);
+    const title = (await link.textContent().catch(() => ''))?.trim() ?? 'Out of Stock SKU';
+
+    if (href && href.includes('/product/')) {
+      const normalizedUrl = href.startsWith('/') ? `${new URL(page.url()).origin}${href}` : href;
+      logger.info('ProductDiscovery', `Found live OOS product: ${normalizedUrl}`);
+      return { title, url: normalizedUrl };
+    }
+  }
+
+  logger.info('ProductDiscovery', 'No OOS product found on current search listing.');
+  return null;
+}

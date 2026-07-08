@@ -4,7 +4,7 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.5.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v1.6.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
 ![Test Status](https://img.shields.io/badge/Tests-48%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
@@ -188,19 +188,22 @@ npm run report
 
 ## ⚡ Core Web Vitals & API Contract Verification
 
-In `v1.5.0`, automated performance budgeting and contract validation are seamlessly integrated:
+In `v1.6.0`, automated performance budgeting and network contract validation are seamlessly integrated:
 - **Core Web Vitals Thresholds**: Asserts that `Time to First Byte (TTFB)` remains under `10,000ms` and `First Contentful Paint (FCP)` completes cleanly on live production pages.
-- **AJAX Interception**: Automatically inspects network responses during dynamic search interactions to ensure production REST endpoints comply with expected JSON schemas.
+- **Conscious Scope Decision on API/Network Testing (§3.1)**: While standalone backend REST API testing remains out of scope, **light network-assertion coverage on UI-triggered AJAX calls** (such as live search autocomplete in `api-contracts.spec.ts`) is formally **in-scope**. It passively verifies HTTP status codes ($\ge 200$) and JSON payload structures during genuine user interactions without hitting standalone APIs directly.
+- **Dynamic Inventory Self-Healing (§2)**: Out-of-Stock tests (`out-of-stock.spec.ts`) dynamically discover current OOS SKUs at runtime (`findCurrentOosProduct`) instead of hardcoding static URLs.
 
 ---
 
 ## 🌐 Cloudflare WAF Resilience & Cross-Browser Rationale
 
-### Automated WAF Interstitial Handling (`src/utils/waf.ts`)
-When running automated tests against enterprise CDNs like Cloudflare, datacenter IPs may encounter defensive bot interstitials ("Just a moment..."). Our framework integrates a built-in WAF detector within `base.fixture.ts`. If a WAF interstitial is detected, the fixture safely marks the test as skipped with reason `environment-blocked-by-waf` rather than causing false-positive selector timeouts.
+### Automated WAF Handling: Mitigation vs. Solution (§3.3)
+When running automated tests against enterprise CDNs like Cloudflare, datacenter IPs may encounter defensive bot interstitials ("Just a moment..."). Our framework integrates a built-in WAF detector within `base.fixture.ts`. If a WAF interstitial is detected, the fixture safely marks the test as skipped with reason `environment-blocked-by-waf`.
+- **WAF Mitigation:** Automated retry-with-backoff (up to 3 retries with exponential delay) in `.github/workflows/nightly-smoke.yml` serves as an active **mitigation** to smooth over transient datacenter IP challenges.
+- **WAF Solution:** A self-hosted corporate or residential runner remains the only permanent **solution** for 100% reliable scheduled runs against production without Cloudflare datacenter IP reputation blocks.
 
 ### Why Chromium-Only Scope (`chromium-desktop`, `mobile-chrome`)
-- **Traffic Dominance**: Chromium engines account for over 92% of live traffic on `ubuy.co.in`.
+- **Traffic Dominance (§3.2)**: Chromium-based engines account for an estimated **~92% of active desktop and mobile user traffic** (per industry e-commerce benchmarks and site traffic distributions).
 - **Server Rate-Limit Protection**: Enforcing single-worker serial execution (`workers: 1`) prevents server strain; adding a 3-browser matrix would triple execution times without improving core defect discovery.
 
 ---

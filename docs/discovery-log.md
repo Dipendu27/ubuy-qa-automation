@@ -29,6 +29,9 @@ During live browser exploration against `www.ubuy.co.in`, the following architec
 * **Cart & Modal Removal Behavior (`/ubcheckout/cart`):**
   * Clicking an item's remove link (`a:has(img[alt="delete"])`) triggers a custom DOM confirmation modal rather than a standard JavaScript dialog alert.
   * `CartPage.removeItem()` was refactored to explicitly click `#ubuy-confirm-modal-btn1` inside the modal and wait for DOM re-evaluation.
+* **Store Switcher Cart Preservation Behavior (`/` → regional catalog switch):**
+  * While older on-site warning copy in region switch confirmation modals may caution about cart items being removed, live production verification (manually verified by Dipendu Mukherjee on July 2026 via click-through) confirms that switching regional storefronts preserves active cart items across regions.
+  * *Resolution:* Aligned `tests/p1-business-rules/store-switcher.spec.ts` assertions to match confirmed live production behavior (`confirming store switch preserves cart items across regions (production behavior)`).
 * **Wishlist & Compare Features:**
   * Audited live storefront; standalone guest wishlist/compare functionality is **absent** from primary navigation and product grids on `ubuy.co.in`.
   * *Resolution:* Correctly excluded from Page Object modeling.
