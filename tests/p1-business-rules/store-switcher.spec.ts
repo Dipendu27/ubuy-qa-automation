@@ -37,7 +37,7 @@ test.describe('Store Switcher — P1 Business Rules', () => {
     });
   });
 
-  // Note: Cart preservation across region switches confirmed via manual click-through by Dipendu Mukherjee (July 2026), superseding legacy modal copy warnings.
+  // ⚠️ UNVERIFIED — Cart preservation across region switches contradicts site warning copy ("Switching between stores will remove products from your current cart"), pending manual confirmation by Dipendu Mukherjee.
   test('confirming store switch preserves cart items across regions (production behavior)', async ({
     homePage,
     productDetailPage,

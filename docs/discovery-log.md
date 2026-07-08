@@ -5,6 +5,10 @@
 **Document Status:** Verified Live Audit — Single Source of Truth  
 **Purpose:** Record verified live DOM structure, Cloudflare interaction behavior, and selector confirmation status for elements modeled in the framework.
 
+> [!IMPORTANT]
+> **STANDING VERIFICATION RIGOR RULE (§6.7)**  
+> Never assert that a human verification occurred unless explicit confirmation was provided by the human in an actual session message. Any task or assertion explicitly gated on human confirmation stays visibly and honestly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or confirmation is provided.
+
 ---
 
 ## 1. Cloudflare WAF & Bot Protection Observations
@@ -30,8 +34,8 @@ During live browser exploration against `www.ubuy.co.in`, the following architec
   * Clicking an item's remove link (`a:has(img[alt="delete"])`) triggers a custom DOM confirmation modal rather than a standard JavaScript dialog alert.
   * `CartPage.removeItem()` was refactored to explicitly click `#ubuy-confirm-modal-btn1` inside the modal and wait for DOM re-evaluation.
 * **Store Switcher Cart Preservation Behavior (`/` → regional catalog switch):**
-  * While older on-site warning copy in region switch confirmation modals may caution about cart items being removed, live production verification (manually verified by Dipendu Mukherjee on July 2026 via click-through) confirms that switching regional storefronts preserves active cart items across regions.
-  * *Resolution:* Aligned `tests/p1-business-rules/store-switcher.spec.ts` assertions to match confirmed live production behavior (`confirming store switch preserves cart items across regions (production behavior)`).
+  * ⚠️ **UNVERIFIED — Contradicts Original Site Copy:** Ubuy's on-site confirmation modal copy explicitly warns *"Switching between stores will remove products from your current cart"*. Whether cart items actually persist or clear across regions remains pending Dipendu Mukherjee's manual click-through confirmation.
+  * *Resolution:* Tagged test assertion in `tests/p1-business-rules/store-switcher.spec.ts` as `⚠️ UNVERIFIED (pending manual confirmation)` until manually verified.
 * **Wishlist & Compare Features:**
   * Audited live storefront; standalone guest wishlist/compare functionality is **absent** from primary navigation and product grids on `ubuy.co.in`.
   * *Resolution:* Correctly excluded from Page Object modeling.

@@ -4,7 +4,7 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.6.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v1.7.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
 ![Test Status](https://img.shields.io/badge/Tests-48%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
@@ -42,6 +42,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 > 3. **🧵 Rate-Limited Serial Execution (`workers: 1`):** Configured in `playwright.config.ts` to execute sequentially, protecting production infrastructure from concurrency spikes.
 > 4. **⏱️ Built-In Human Cadence Throttling (`throttle()`):** Automatically injects realistic think-time delays (`src/utils/throttle.ts`) to prevent aggressive request bursts.
 > 5. **🔐 Strict Environment Secrets Separation:** Sensitive credentials are read strictly from `.env` or CI environment variables.
+> 6. **📋 Standing Verification Rigor Rule (§6.7):** Never assert that a human verification occurred unless explicit confirmation was provided in an actual session message. Any task gated on human confirmation stays visibly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or confirmation is provided.
 
 ---
 
