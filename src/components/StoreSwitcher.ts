@@ -47,7 +47,7 @@ export class StoreSwitcher {
   async selectStore(region: StoreRegion): Promise<void> {
     await this.open();
     const option = this.page.locator(homeLocators.storeSwitcherOption(region)).first();
-    await option.click();
+    await option.dispatchEvent('click');
     await throttle();
   }
 

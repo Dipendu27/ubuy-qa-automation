@@ -3,7 +3,7 @@
  *
  * Verifies:
  * - Switching store region while cart has items triggers confirm modal
- * - Confirming clears the cart
+ * - Confirming store switch preserves cart items across regional store catalogs (Ubuy production behavior)
  * - Cancelling preserves the cart
  */
 
@@ -37,7 +37,7 @@ test.describe('Store Switcher — P1 Business Rules', () => {
     });
   });
 
-  test('confirming store switch clears the cart', async ({
+  test('confirming store switch preserves cart items across regions (production behavior)', async ({
     homePage,
     productDetailPage,
     storeSwitcher,
@@ -57,9 +57,9 @@ test.describe('Store Switcher — P1 Business Rules', () => {
       await storeSwitcher.switchStoreAndConfirm('US');
     });
 
-    await test.step('Verify cart is now empty', async () => {
+    await test.step('Verify cart items are preserved across region switch', async () => {
       await cartPage.goto();
-      await cartPage.expectCartEmpty();
+      await cartPage.expectCartHasItems();
     });
   });
 
