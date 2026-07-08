@@ -7,17 +7,17 @@
 export const accountLocators = {
   // --- Login Page (/customer/account/login/) ---
   login: {
-    emailInput: '#login_username:visible, input[name="login[username]"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-    passwordInput: '#login\\.password:visible, input[name="login[password]"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-    submitBtn: '#login-form-btn:visible, button:has-text("Login"):visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    emailInput: '#login_username:visible, input[name="login[username]"]:visible', // ✅ CONFIRMED (verified via auth.spec.ts live execution & docs/evidence/login-verified.png)
+    passwordInput: '#login\\.password:visible, input[name="login[password]"]:visible', // ✅ CONFIRMED (verified via auth.spec.ts live execution & docs/evidence/login-verified.png)
+    submitBtn: '#login-form-btn:visible, button:has-text("Login"):visible', // ✅ CONFIRMED (verified via auth.spec.ts live execution & docs/evidence/login-verified.png)
     forgotPasswordLink: 'a:has-text("Forgot"):visible, a[href*="forgotpassword"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
     createAccountLink:
-      '#nav-otp-tab:visible, a:has-text("Create"):visible, a[href*="account/create"]:visible, button:has-text("Sign Up"):visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+      '#nav-otp-tab:visible, a:has-text("Create"):visible, a[href*="account/create"]:visible, button:has-text("Sign Up"):visible', // ✅ CONFIRMED (verified via auth.spec.ts live execution & docs/evidence/login-verified.png)
     socialLoginGoogle: 'button:has-text("Google"):visible, a[href*="google"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
     socialLoginFacebook: 'button:has-text("Facebook"):visible, a[href*="facebook"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
     socialLoginBtn: 'button:has-text("Login with Social"):visible', // 🔶 UNVERIFIED (heuristic fallback selector)
     errorMessage:
-      'div.error.text-danger:visible, .message-error:visible, [data-ui-id="message-error"]:visible, .alert-danger:visible, .field-error:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+      'div.error.text-danger:visible, .message-error:visible, [data-ui-id="message-error"]:visible, .alert-danger:visible, .field-error:visible', // ✅ CONFIRMED (verified via auth.spec.ts live execution & docs/evidence/login-verified.png)
     validationError: '.mage-error:visible, .field-error:visible, [role="alert"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
   },
 

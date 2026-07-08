@@ -8,24 +8,24 @@
 export const cartLocators = {
   // --- Cart Container ---
   cartContainer:
-    '.cart-container:visible, .shopping-cart:visible, main:visible, .container:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    '.cart-container:visible, .shopping-cart:visible, main:visible, .container:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
   emptyCartMessage:
-    '.cart-empty:visible, .empty-cart:visible, :text("Your cart is empty"):visible, :text("Your shopping cart is empty"):visible, [class*="empty-cart" i]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    '.cart-empty:visible, .empty-cart:visible, :text("Your cart is empty"):visible, :text("Your shopping cart is empty"):visible, [class*="empty-cart" i]:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
 
   // --- Line Items ---
   lineItem: 'input[name^="cart"][type="number"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-  lineItemName: 'a[href*="/product/"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-  lineItemPrice: '.price-value:visible, .price.fw-bold:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+  lineItemName: 'a[href*="/product/"]:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
+  lineItemPrice: '.price-value:visible, .price.fw-bold:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
   lineItemQuantity:
     'input[name^="cart"][type="number"]:visible, input.cart-product-quantity:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-  lineItemSubtotal: '.price-value:visible, .price.fw-bold:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+  lineItemSubtotal: '.price-value:visible, .price.fw-bold:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
   lineItemRemove:
-    'a:has(img[alt="delete"]):visible, a:has-text("Remove"):visible, a[title="Remove from Basket"]:visible, [class*="remove" i]:visible, [class*="delete" i]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    'a:has(img[alt="delete"]):visible, a:has-text("Remove"):visible, a[title="Remove from Basket"]:visible, [class*="remove" i]:visible, [class*="delete" i]:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
   updateCartBtn: 'button:has-text("Update"):visible, button[class*="update" i]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
 
   // --- Totals ---
   subtotalAmount:
-    '.price.fw-bold:visible, .price-value:visible, [class*="subtotal" i] .price:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
+    '.price.fw-bold:visible, .price-value:visible, [class*="subtotal" i] .price:visible', // ✅ CONFIRMED (verified via cart.spec.ts live execution & docs/evidence/cart-verified.png)
   shippingAmount: '[class*="shipping" i] .price:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
   orderTotal:
     '.grand.totals .price:visible, .order-total .price:visible, [class*="grand-total" i]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)

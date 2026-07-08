@@ -21,6 +21,7 @@ A production-grade, end-to-end UI test automation framework built for **Ubuy Ind
 ## 🏗️ Architecture & Tech Stack
 
 * **Engine:** [Playwright](https://playwright.dev/) (v1.52+)
+* **Browser Scope:** Chromium-family only (`chromium-desktop`, `mobile-chrome`), by design — see CHANGELOG 1.3.0 and Cross-Browser Scope Decision section below for rationale
 * **Language:** TypeScript (Strict mode enabled)
 * **Design Pattern:** Page Object Model (POM) with Lazy Fixtures
 * **Code Quality:** ESLint, Prettier, Husky, and Lint-Staged pre-commit hooks
@@ -156,6 +157,6 @@ To maintain transparency and prevent regression drift, any new selector added to
 > **CI Execution on Shared Runners**
 > The GitHub Actions workflow (`.github/workflows/nightly-smoke.yml`) runs on shared GitHub-hosted `ubuntu-latest` runners using `xvfb-run`. Cloudflare WAF is materially more likely to challenge or hard-block traffic originating from shared datacenter IP ranges than from residential or corporate IPs.
 >
-> **Mitigation & Workaround (§3.6):**
+> **Mitigation & Workaround (§3.6 & §3.2):**
 > * A global WAF challenge detector (`src/utils/waf.ts`) is integrated into the automatic test fixture (`base.fixture.ts`). If a Cloudflare challenge page ("Just a moment" or WAF interstitial) is encountered, tests are cleanly skipped and annotated with `environment-blocked-by-waf` instead of failing with generic locator timeouts.
-> * **Long-Term Recommendation:** For 100% reliable scheduled nightly smoke runs against production, execute the test suite from a self-hosted runner on a corporate/office network or residential static IP.
+> * **WAF Mitigation vs. Solution:** Automated retry-with-backoff (up to 3 retries with exponential delay) in `nightly-smoke.yml` serves as an active **mitigation** to smooth over transient datacenter IP challenges; however, this does not eliminate hard IP-range blocks. A self-hosted corporate or residential runner remains the only permanent **solution** for 100% reliable scheduled runs against production.

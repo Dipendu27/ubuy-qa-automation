@@ -1,6 +1,6 @@
 {
   "name": "ubuy-qa-automation",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Production-grade E2E UI test automation framework for ubuy.co.in — Playwright + TypeScript, Page Object Model",
   "private": true,
   "type": "module",

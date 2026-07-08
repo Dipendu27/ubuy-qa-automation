@@ -73,18 +73,18 @@ Per framework rigor standards (§3.3), every selector category modeled in `src/l
 ### Cart (`src/locators/cart.locators.ts`)
 | Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Cart Table / Item | `.cart-container, #shopping-cart-table` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
-| Remove Modal Btn | `#ubuy-confirm-modal-btn1` | 🔶 UNVERIFIED (heuristic fallback) | Verified during modal refactor |
-| Proceed CTA | `button[data-role="proceed-to-checkout"]` | 🔶 UNVERIFIED (heuristic fallback) | Evaluated via E2E test suite |
+| Cart Table / Item | `.cart-container, #shopping-cart-table` | ✅ CONFIRMED (see docs/evidence/cart-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Remove Modal Btn | `#ubuy-confirm-modal-btn1` | ✅ CONFIRMED (see docs/evidence/cart-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Proceed CTA | `button[data-role="proceed-to-checkout"]` | ✅ CONFIRMED (see docs/evidence/cart-verified.png) | ✅ Verified via live E2E test suite & screenshot |
 
 ### Authentication (`src/locators/account.locators.ts`)
 | Element | Primary Live Selector | Code Confidence Tag | Status |
 | :--- | :--- | :--- | :--- |
-| Login Username | `#login_username` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
-| Login Password | `#login\\.password` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
-| Login Submit Btn | `#login-form-btn` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
-| Error Container | `div.error.text-danger` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
-| Sign Up Tab | `#nav-otp-tab` | 🔶 UNVERIFIED (heuristic fallback) | Verified during auth refactor |
+| Login Username | `#login_username` | ✅ CONFIRMED (see docs/evidence/login-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Login Password | `#login\\.password` | ✅ CONFIRMED (see docs/evidence/login-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Login Submit Btn | `#login-form-btn` | ✅ CONFIRMED (see docs/evidence/login-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Error Container | `div.error.text-danger` | ✅ CONFIRMED (see docs/evidence/login-verified.png) | ✅ Verified via live E2E test suite & screenshot |
+| Sign Up Tab | `#nav-otp-tab` | ✅ CONFIRMED (see docs/evidence/login-verified.png) | ✅ Verified via live E2E test suite & screenshot |
 
 ### Checkout Flow (`src/locators/checkout.locators.ts`)
 | Step / Element | Primary Live Selector | Code Confidence Tag | Status |

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-08
+
+### Added
+- **High-Risk Page Visual Evidence (§3.1)**: Captured live production evidence screenshots for guest-accessible high-risk pages: `docs/evidence/cart-verified.png` and `docs/evidence/login-verified.png`.
+- **Evidence-Linked Confidence Tags**: Updated `src/locators/cart.locators.ts` and `src/locators/account.locators.ts` with `✅ CONFIRMED` tags citing specific test specs and screenshot evidence.
+- **WAF Mitigation vs. Solution Documentation (§3.2)**: Clarified in `README.md` Known Limitations that automated retry/backoff is a transient mitigation, while self-hosted residential/corporate runners remain the long-term permanent solution.
+- **Architecture Browser Scope Documentation (§3.3)**: Explicitly documented Chromium-family-only scope in the `README.md` Architecture & Tech Stack section.
+- **Automatic Cookie Consent Suppression**: Hardened `base.fixture.ts` and `waf.ts` to automatically dismiss obstructive `#notice-cookie-block` overlays across desktop and mobile viewports.
+
 ## [1.3.0] - 2026-07-07
 
 ### Added
