@@ -1,0 +1,55 @@
+name: PR Checks & Fast Smoke Suite
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  pr-checks:
+    name: Code Hygiene & Smoke Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      BASE_URL: ${{ secrets.BASE_URL || 'https://www.ubuy.co.in' }}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      CI: true
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check Prettier Formatting
+        run: npm run format:check
+
+      - name: Type Check (TypeScript)
+        run: npx tsc --noEmit
+
+      - name: Install Playwright Browsers & OS Dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Fast Smoke Subset (Homepage P0)
+        run: xvfb-run npx playwright test tests/p0-critical-path/homepage.spec.ts --project=chromium-desktop
+
+      - name: Upload Test Results & Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-playwright-report-${{ github.run_id }}
+          path: |
+            reports/html/
+            test-results/
+          retention-days: 7

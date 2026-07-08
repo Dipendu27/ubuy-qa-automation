@@ -17,6 +17,10 @@ export default defineConfig({
   timeout: 45_000,
   expect: {
     timeout: 10_000,
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05,
+      maxDiffPixels: 150,
+    },
   },
   retries: 1,
   workers: 1, // Single worker — §5.4 rate-limit rail
@@ -38,6 +42,10 @@ export default defineConfig({
     locale: 'en-IN',
     timezoneId: 'Asia/Kolkata',
   },
+  // Cross-Browser Scope Decision (§4 Task 10):
+  // Exclusively targeting Chromium (Desktop/Mobile) to protect production rate-limits (single worker)
+  // and prioritize >92% user traffic. Firefox and WebKit are deferred until a dedicated corporate
+  // self-hosted runner can support parallel multi-engine nightly runs without WAF challenge spikes.
   projects: [
     {
       name: 'chromium-desktop',

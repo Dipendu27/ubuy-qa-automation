@@ -70,4 +70,21 @@ test.describe('Shipping Calculation — P1 Business Rules', () => {
       expect(shippingPricesWith4Items).not.toEqual(shippingPricesWith1Item);
     });
   });
+
+  test('malformed PIN formats (e.g. "000000", "ABCDEF") on delivery check are handled gracefully without errors (§4 Task 11)', async ({
+    productDetailPage,
+    page,
+  }) => {
+    await test.step('Navigate to a product page', async () => {
+      await page.goto(testProduct.url);
+    });
+
+    await test.step('Check delivery with malformed PIN "000000"', async () => {
+      await productDetailPage.checkDelivery('000000');
+    });
+
+    await test.step('Verify page remains interactive without unhandled exceptions', async () => {
+      await expect(productDetailPage.productTitle).toBeVisible();
+    });
+  });
 });

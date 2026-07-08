@@ -39,15 +39,32 @@ jobs:
       - name: Install Playwright Browsers & OS Dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright Tests (Headed via xvfb per §5.1 / §8.4)
+      - name: Run Playwright Tests with WAF Retry Mitigation (Headed via xvfb)
         run: |
-          if [ "${{ github.event.inputs.test_suite }}" == "all" ]; then
-            xvfb-run npx playwright test --project=chromium-desktop
-          elif [ -n "${{ github.event.inputs.test_suite }}" ]; then
-            xvfb-run npx playwright test tests/${{ github.event.inputs.test_suite }}-* --project=chromium-desktop
-          else
-            xvfb-run npx playwright test tests/p0-critical-path/ --project=chromium-desktop
-          fi
+          run_suite() {
+            if [ "${{ github.event.inputs.test_suite }}" == "all" ]; then
+              xvfb-run npx playwright test --project=chromium-desktop
+            elif [ -n "${{ github.event.inputs.test_suite }}" ]; then
+              xvfb-run npx playwright test tests/${{ github.event.inputs.test_suite }}-* --project=chromium-desktop
+            else
+              xvfb-run npx playwright test tests/p0-critical-path/ --project=chromium-desktop
+            fi
+          }
+          # Bounded retry-with-backoff mitigation for Cloudflare WAF challenges on GitHub-hosted IPs (§4 Task 7b)
+          n=0
+          until [ $n -ge 3 ]
+          do
+            run_suite && break
+            n=$((n+1))
+            if [ $n -lt 3 ]; then
+              sleep_time=$((n * 30))
+              echo "::warning::Test execution failed (potential Cloudflare WAF challenge). Retrying in ${sleep_time}s (attempt $n/2)..."
+              sleep $sleep_time
+            else
+              echo "::error::Suite failed after $n attempts. Note: GitHub-hosted runners have elevated Cloudflare WAF challenge rates; a residential/corporate self-hosted runner is recommended."
+              exit 1
+            fi
+          done
 
       - name: Upload Test Results & Reports
         if: always()
@@ -58,3 +75,15 @@ jobs:
             reports/html/
             test-results/
           retention-days: 14
+
+      - name: Send Failure Notification (§4 Task 4)
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"🚨 *Nightly Smoke Suite Failed* against $BASE_URL\nRun: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" "$SLACK_WEBHOOK_URL"
+          else
+            echo "::warning::SLACK_WEBHOOK_URL secret not set. Please add SLACK_WEBHOOK_URL to GitHub Actions repo secrets to enable automated failure alerts."
+          fi
+

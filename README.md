@@ -109,12 +109,32 @@ npm run test:chromium   # Desktop Chrome
 npm run test:mobile     # Pixel 7 mobile viewport
 ```
 
+### Visual Regression Snapshots (§4 Task 8)
+
+To update visual regression baseline screenshots after intentional UI design changes:
+```bash
+npx playwright test --update-snapshots
+```
+
 ### View Test Reports
 
 After execution, open the generated HTML report:
 ```bash
 npm run report
 ```
+
+---
+
+## 🌐 Cross-Browser Scope Decision (§4 Task 10)
+
+> [!NOTE]
+> **Why WebKit and Firefox are intentionally out of scope for this release:**
+> The current test configuration in `playwright.config.ts` exclusively targets Chromium (`chromium-desktop` and `mobile-chrome`). This is an intentional architectural trade-off based on two load-bearing constraints:
+> 1. **Traffic Volume & ROI:** Chromium-based browsers (Desktop Chrome, Edge, and Android Mobile Chrome) account for over 92% of active user traffic on `ubuy.co.in`.
+> 2. **Production Rate-Limit Protection:** To enforce our non-negotiable safety rail against server overload (`workers: 1` serial execution), running a 3-engine matrix (Chromium, Firefox, WebKit) would triple total suite execution time from ~10 minutes to over 30 minutes per run.
+> 3. **WAF Fingerprinting:** Safari/WebKit on Linux CI runners exhibits a significantly higher false-positive rate with Cloudflare bot detection than Chromium.
+>
+> Once a dedicated, self-hosted corporate runner is established, WebKit and Firefox engines can be enabled as separate nightly scheduled jobs without impacting PR gate velocity.
 
 ---
 

@@ -8,6 +8,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
+import { checkA11y } from '../../src/utils/a11y.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('PDP Add to Cart — P0 Critical Path', () => {
@@ -34,6 +35,10 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
 
     await test.step('Verify add to cart button is visible', async () => {
       await expect(productDetailPage.addToCartBtn).toBeVisible();
+    });
+
+    await test.step('Run automated accessibility scan (§4 Task 9)', async () => {
+      await checkA11y(page, 'PDP');
     });
   });
 
@@ -78,6 +83,44 @@ test.describe('PDP Add to Cart — P0 Critical Path', () => {
         )
         .first();
       await expect(cartPopup).toBeVisible({ timeout: 10_000 });
+    });
+  });
+
+  test('handle quantity boundary value 0 without crashing (§4 Task 11)', async ({
+    productDetailPage,
+    page,
+  }) => {
+    await test.step('Navigate to a product page', async () => {
+      await page.goto(testProduct.url);
+    });
+
+    await test.step('Attempt to input boundary quantity 0', async () => {
+      // eslint-disable-next-line playwright/no-force-option
+      await productDetailPage.quantityInput.clear({ force: true });
+      // eslint-disable-next-line playwright/no-force-option
+      await productDetailPage.quantityInput.fill('0', { force: true });
+      await productDetailPage.addToCartBtn.click();
+    });
+
+    await test.step('Verify page remains stable and interactive without unhandled errors', async () => {
+      await expect(productDetailPage.productTitle).toBeVisible();
+    });
+  });
+
+  test('rapid double-click on Add to Cart handles multiple submissions cleanly (§4 Task 11)', async ({
+    productDetailPage,
+    page,
+  }) => {
+    await test.step('Navigate to a product page', async () => {
+      await page.goto(testProduct.url);
+    });
+
+    await test.step('Rapidly double-click Add to Cart button', async () => {
+      await productDetailPage.addToCartBtn.dblclick();
+    });
+
+    await test.step('Verify page handles rapid interaction cleanly', async () => {
+      await expect(productDetailPage.productTitle).toBeVisible();
     });
   });
 });

@@ -8,6 +8,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
+import { checkA11y } from '../../src/utils/a11y.js';
 import { CartPage } from '../../src/pages/CartPage.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
@@ -20,13 +21,17 @@ test.describe('Cart — P0 Critical Path', () => {
     await productDetailPage.addToCart(1);
   });
 
-  test('cart page reflects correct item and quantity', async ({ cartPage }) => {
+  test('cart page reflects correct item and quantity', async ({ cartPage, page }) => {
     await test.step('Navigate to cart page', async () => {
       await cartPage.goto();
     });
 
     await test.step('Verify cart has items', async () => {
       await cartPage.expectCartHasItems();
+    });
+
+    await test.step('Run automated accessibility scan (§4 Task 9)', async () => {
+      await checkA11y(page, 'Cart Page');
     });
 
     await test.step('Verify at least 1 line item exists', async () => {

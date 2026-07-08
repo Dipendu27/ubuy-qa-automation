@@ -7,6 +7,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
+import { checkA11y } from '../../src/utils/a11y.js';
 import keywordsData from '../../src/fixtures/test-data/keywords.json' with { type: 'json' };
 
 test.describe('Search — P0 Critical Path', () => {
@@ -18,6 +19,7 @@ test.describe('Search — P0 Critical Path', () => {
     test(`search for "${keyword}" returns non-empty results — ${description}`, async ({
       homePage,
       searchResultsPage,
+      page,
     }) => {
       await test.step(`Search for "${keyword}"`, async () => {
         await homePage.search(keyword);
@@ -30,6 +32,10 @@ test.describe('Search — P0 Critical Path', () => {
       await test.step('Verify result count is greater than zero', async () => {
         const count = await searchResultsPage.getResultCount();
         expect(count).toBeGreaterThan(0);
+      });
+
+      await test.step('Run automated accessibility scan (§4 Task 9)', async () => {
+        await checkA11y(page, 'Search Results');
       });
     });
   }
@@ -48,4 +54,23 @@ test.describe('Search — P0 Critical Path', () => {
       });
     });
   }
+
+  test('search for XSS/SQLi-shaped input safely handles input without executing attacks (§4 Task 11)', async ({
+    homePage,
+    page,
+  }) => {
+    let dialogTriggered = false;
+    page.on('dialog', () => {
+      dialogTriggered = true;
+    });
+
+    await test.step('Search for XSS payload "<script>alert(1)</script>"', async () => {
+      await homePage.search('<script>alert(1)</script>');
+    });
+
+    await test.step('Verify zero JavaScript alert execution and safe page rendering', async () => {
+      expect(dialogTriggered).toBe(false);
+      await expect(page.locator('body')).toBeVisible();
+    });
+  });
 });

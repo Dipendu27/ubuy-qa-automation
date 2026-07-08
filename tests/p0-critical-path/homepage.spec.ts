@@ -5,6 +5,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
+import { checkA11y } from '../../src/utils/a11y.js';
 
 test.describe('Homepage — P0 Critical Path', () => {
   test.beforeEach(async ({ homePage }) => {
@@ -16,6 +17,10 @@ test.describe('Homepage — P0 Critical Path', () => {
       const title = await page.title();
       expect(title).toBeTruthy();
       expect(title.length).toBeGreaterThan(0);
+    });
+
+    await test.step('Run automated accessibility scan (§4 Task 9)', async () => {
+      await checkA11y(page, 'Homepage');
     });
   });
 

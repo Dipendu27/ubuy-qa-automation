@@ -22,6 +22,12 @@ test.describe('Responsive Smoke Pass — P2 Content & SEO', () => {
       await expect(homePage.header).toBeVisible();
       await expect(homePage.searchBar).toBeVisible();
     });
+
+    await test.step('Verify visual snapshot baseline of mobile header (§4 Task 8)', async () => {
+      await expect(homePage.header).toHaveScreenshot('mobile-header-baseline.png', {
+        maxDiffPixelRatio: 0.05,
+      });
+    });
   });
 
   test('PDP renders correctly and allows add-to-cart on mobile viewport', async ({
