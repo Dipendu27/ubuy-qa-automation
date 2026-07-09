@@ -65,6 +65,8 @@ export const checkoutLocators = {
       '.opc-block-summary .grand.totals .price, .order-summary .grand-total .price, [class*="grand-total" i], [class*="total" i]', // 🔶 UNVERIFIED (heuristic fallback selector)
 
     // --- STOP HERE — no payment submission (§5.2) ---
-    placeOrderBtn: 'button[title="Place Order"], button:has-text("Place Order")', // 🔶 UNVERIFIED (heuristic fallback selector)
+    // ⛔ SAFETY: No order-placement selector exists by design. Order placement must
+    // NEVER be automated against production. The safety guardrail
+    // (scripts/enforce-no-place-order.mjs) scans ALL of src/ and tests/ to enforce this.
   },
 };

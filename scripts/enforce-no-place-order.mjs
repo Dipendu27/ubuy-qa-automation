@@ -2,7 +2,10 @@
  * CI Safety Guardrail (§4 Task 5)
  *
  * Enforces zero references to `placeOrderBtn` or order placement click actions
- * across `src/pages/`, `src/components/`, and `tests/`.
+ * across ALL of `src/` (pages, components, locators, fixtures, utils, config)
+ * and `tests/`. Scanning the entire `src/` tree ensures no subdirectory (e.g.,
+ * `src/locators/`) can ever become a blind spot for forbidden order-placement
+ * references. (v2.0.1 — widened scope from src/pages + src/components.)
  */
 
 import fs from 'fs';
@@ -13,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const TARGET_DIRS = ['src/pages', 'src/components', 'tests'];
+const TARGET_DIRS = ['src', 'tests'];
 const FORBIDDEN_PATTERNS = [
   /placeOrderBtn/i,
   /\.click\(\s*.*place.*order/i,
@@ -34,7 +37,10 @@ function scanDirectory(dir) {
     const relPath = path.relative(rootDir, resPath);
     if (entry.isDirectory()) {
       scanDirectory(relPath);
-    } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.js'))) {
+    } else if (
+      entry.isFile() &&
+      ['.ts', '.tsx', '.js', '.mjs'].some((ext) => entry.name.endsWith(ext))
+    ) {
       const content = fs.readFileSync(resPath, 'utf8');
       const lines = content.split('\n');
       lines.forEach((line, index) => {
