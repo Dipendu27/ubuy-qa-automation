@@ -131,6 +131,10 @@ export class CartPage {
   /**
    * Parse a price string like "INR71,883.00" into a number.
    * Utility for assertions involving price comparisons.
+   *
+   * ⚠️ UNVERIFIED LIVE FORMAT — Pending live evidence capture of exact raw price element text
+   * per v1.9.0 §3. If live prefix contains a period (e.g. "Rs. 71,883.00"), regex must be hardened
+   * to isolate the numeric run instead of stripping non-digits globally.
    */
   static parsePrice(priceText: string): number {
     const cleaned = priceText.replace(/[^\d.]/g, '');

@@ -17,8 +17,7 @@ test.describe('Core Web Vitals & Performance — P2 Content & SEO', () => {
     await test.step('Measure timings & verify budget', async () => {
       const metrics = await measurePagePerformance(page);
       const audit = verifyPerformanceBudget(metrics, 10000, 30000);
-      expect(metrics.ttfbMs).toBeGreaterThanOrEqual(0);
-      expect(audit.warnings.length).toBeDefined();
+      expect(audit.passed, `Performance budget exceeded: ${audit.warnings.join('; ')}`).toBe(true);
     });
   });
 
@@ -29,9 +28,12 @@ test.describe('Core Web Vitals & Performance — P2 Content & SEO', () => {
       await page.goto(testProduct.url);
     });
 
-    await test.step('Measure PDP timings', async () => {
+    await test.step('Measure PDP timings & verify budget', async () => {
       const metrics = await measurePagePerformance(page);
-      expect(metrics.domContentLoadedMs).toBeGreaterThanOrEqual(0);
+      const audit = verifyPerformanceBudget(metrics, 10000, 30000);
+      expect(audit.passed, `PDP performance budget exceeded: ${audit.warnings.join('; ')}`).toBe(
+        true,
+      );
     });
   });
 });

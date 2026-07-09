@@ -4,9 +4,9 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.8.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v1.9.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
-![Test Status](https://img.shields.io/badge/Tests-48%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
+![Test Status](https://img.shields.io/badge/Tests-50%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
 </div>
@@ -46,25 +46,27 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v1.8.0 Key Capabilities & Architectural Pillars
+## 🌟 Release v1.9.0 Key Capabilities & Architectural Pillars
 
-Release `v1.8.0` strengthens repository integrity, verification rigor, and self-healing automation across our 59-test suite:
+Release `v1.9.0` hardens test assertion rigor, network listening precision, and price parsing regression verification across our 61-test suite:
 
-- **📋 Honest Test Title & Report Annotation Alignment (`v1.8.0`)**: Ensures test titles and runtime HTML report annotations (`test.info().annotations.push({ type: 'unverified' })`) strictly align with unverified documentation notes. Any test observing unconfirmed production behaviors carries explicit visual flags in test reports so results never imply false certainty.
+- **🔍 Tautological Assertion Elimination (`v1.9.0`)**: Replaced non-failing assertion patterns (`toBeDefined()`, `>= 0` on timings) with rigorous boolean assertions (`expect(audit.passed).toBe(true)`, `expect(contract.valid).toBe(true)`), ensuring performance and API schema violations explicitly fail tests.
+- **📡 Logical Network Predicate Precision (`v1.9.0`)**: Grouped `waitForResponse` predicates (`&&` instead of loose `||`) in API contract tests to guarantee interception matches the exact target AJAX endpoint (`/search`) rather than unrelated HTTP 200 static assets.
+- **💰 Price Parsing Regression Suite (`v1.9.0`)**: Added `tests/p1-business-rules/price-parsing.spec.ts` to guard against currency parsing fragilities and document live currency prefix format requirements.
+- **📋 Honest Test Title & Report Annotation Alignment (`v1.8.0`)**: Ensures test titles and runtime HTML report annotations (`test.info().annotations.push({ type: 'unverified' })`) strictly align with unverified documentation notes so results never imply false certainty.
 - **📋 Standing Verification Rigor Enforcement (§6.7)**: Hardcodes our zero-fabrication verification policy across documentation and tests. Any task gated on human verification stays visibly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or human confirmation is provided.
-- **⚡ Deduplicated Self-Healing Out-of-Stock Discovery (`src/utils/productDiscovery.ts`)**: Crawls live listings dynamically at runtime (`findCurrentOosProduct`) and hoists discovery into a shared `beforeAll` fixture setup, reducing production network traffic while making OOS tests self-healing against inventory fluctuations.
-- **📡 Conscious Network Interception Scope (`src/utils/apiSchema.ts`)**: Formally includes passive network contract validation on UI-triggered AJAX endpoints (`/search/`), asserting valid HTTP status ($\ge 200$) and JSON headers during genuine user interactions.
-- **⚡ Core Web Vitals Performance Budgeting (`src/utils/performance.ts`)**: Collects real-time navigation timings (`TTFB`, `DOM Content Loaded`, `Load Event`, `First Contentful Paint`) and enforces non-breaking performance budgets across critical P0 pages.
+- **⚡ Deduplicated Self-Healing Out-of-Stock Discovery (`src/utils/productDiscovery.ts`)**: Crawls live listings dynamically at runtime (`findCurrentOosProduct`) and hoists discovery into a shared `beforeAll` fixture setup.
+- **⚡ Core Web Vitals Performance Budgeting (`src/utils/performance.ts`)**: Enforces non-breaking performance budgets across critical P0 pages.
 - **♿ Automated Accessibility Scans (`@axe-core/playwright`)**: Scans core user flows (`Homepage`, `Search Results`, `PDP`, `Cart`) for WCAG accessibility compliance.
 
 ---
 
 ## 📊 Comprehensive Test Matrix & Live Runtime Status
 
-Our verification suite consists of **59 tests** distributed across **14 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
+Our verification suite consists of **61 tests** distributed across **15 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
 
 ```
-  48 active tests passed (100% Pass Rate across all guest & dynamic inventory flows)
+  50 active tests passed (100% Pass Rate across all guest, dynamic inventory & unit regression flows)
   11 skipped cleanly (awaiting dedicated test account credentials per prompt §2)
    0 failed
 ```
@@ -83,14 +85,15 @@ Our verification suite consists of **59 tests** distributed across **14 specific
 | **P1** | `api-contracts.spec.ts` | Search Autocomplete AJAX Contract Verification | 1 | 1 | 0 | ✅ **PASS** |
 | **P1** | `order-history.spec.ts` | My Account Order List, Order Detail View, Tracking Error State | 3 | 0 | 3 | ⏸️ **SKIP** |
 | **P1** | `out-of-stock.spec.ts` | **(v1.7.0)** Dynamic Self-Healing OOS Discovery & CTA Disabled Check | 2 | 0 | 2 | ⏸️ **SKIP** |
+| **P1** | `price-parsing.spec.ts` | **(v1.9.0)** Price Parsing Unit Regression Suite | 2 | 2 | 0 | ✅ **PASS** |
 | **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | 1 | 1 | ✅ **PASS** |
 | **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED — annotated observation pending manual check`) | 3 | 3 | 0 | ✅ **PASS** |
 | **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | 1 | 0 | ✅ **PASS** |
-| **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings | 2 | 2 | 0 | ✅ **PASS** |
+| **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings (`v1.9.0 assertion fix`) | 2 | 2 | 0 | ✅ **PASS** |
 | **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification (Homepage, PDP, Cart) | 3 | 3 | 0 | ✅ **PASS** |
 | **P2** | `static-pages.spec.ts` | About Us, Contact, FAQ, Terms, Shipping, Warranty, ISO, App, Reviews | 10 | 10 | 0 | ✅ **PASS** |
-| **TOTAL** | **14 Spec Files** | **Complete Production E2E Coverage** | **59** | **48** | **11** | **100% Pass** |
+| **TOTAL** | **15 Spec Files** | **Complete Production E2E & Regression Coverage** | **61** | **50** | **11** | **100% Pass** |
 
 ---
 
@@ -99,7 +102,7 @@ Our verification suite consists of **59 tests** distributed across **14 specific
 ```text
 ubuy-qa-automation/
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v1.8.0 version declaration
+├── package.json                # Scripts, dependencies, and v1.9.0 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
@@ -110,7 +113,8 @@ ubuy-qa-automation/
 │   ├── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
 │   ├── RELEASE_v1.6.0.md       # Release v1.6.0 publication notes
 │   ├── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
-│   └── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
+│   ├── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
+│   └── RELEASE_v1.9.0.md       # Release v1.9.0 publication notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry

@@ -19,8 +19,7 @@ test.describe('API Schema & Network Contracts — P1 Business Rules', () => {
     await test.step('Listen for AJAX search responses & validate contract', async () => {
       const responsePromise = page.waitForResponse(
         (response) =>
-          response.url().includes('/search/') ||
-          response.url().includes('ajax') ||
+          (response.url().includes('/search') || response.url().includes('ajax')) &&
           response.status() === 200,
         { timeout: 5000 },
       );
@@ -30,7 +29,9 @@ test.describe('API Schema & Network Contracts — P1 Business Rules', () => {
 
       const response = await responsePromise;
       const contract = await validateJsonResponseContract(response);
-      expect(contract.status).toBeGreaterThanOrEqual(200);
+      expect(contract.valid, `API contract validation failed: ${contract.errors.join('; ')}`).toBe(
+        true,
+      );
 
       await expect(searchInput).toHaveValue('laptop');
     });
