@@ -20,17 +20,38 @@ const staticPages = [
   { name: 'Bulk Quotation', url: '/quotation-page', expectedContent: 'quotation' },
 ];
 
+/**
+ * v2.0.1: The "HTTP 200" step previously never checked a status code — it only
+ * asserted a truthy <title>, so a styled 404 or WAF interstitial passed. Now
+ * the navigation response status must be 200 and the page must not contain
+ * common error markers.
+ */
+const ERROR_MARKERS = [/\b404\b/i, /not found/i, /access denied/i, /attention required/i];
+
 test.describe('Static Pages — P2 Content & SEO', () => {
   for (const pageInfo of staticPages) {
     test(`${pageInfo.name} page loads and has content`, async ({ page }) => {
+      let status: number | undefined;
+
       await test.step(`Navigate to ${pageInfo.url}`, async () => {
-        await page.goto(pageInfo.url);
+        const response = await page.goto(pageInfo.url);
+        status = response?.status();
       });
 
       await test.step('Verify page loaded (HTTP 200)', async () => {
-        // Page should not show a Cloudflare block or 404
+        expect(status, `Expected HTTP 200 for ${pageInfo.url}, got ${status}`).toBe(200);
+      });
+
+      await test.step('Verify page is not a soft error / block page', async () => {
         const title = await page.title();
-        expect(title).toBeTruthy();
+        const bodyText = (await page.locator('body').textContent()) ?? '';
+        for (const marker of ERROR_MARKERS) {
+          expect(title, `Title matches error marker ${marker}`).not.toMatch(marker);
+          expect(
+            bodyText.slice(0, 2000),
+            `Body (leading content) matches error marker ${marker}`,
+          ).not.toMatch(marker);
+        }
       });
 
       await test.step('Verify page has visible body content', async () => {
