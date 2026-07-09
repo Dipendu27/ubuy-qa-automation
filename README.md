@@ -4,7 +4,7 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.7.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v1.8.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
 ![Test Status](https://img.shields.io/badge/Tests-48%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
@@ -83,7 +83,7 @@ Our verification suite consists of **59 tests** distributed across **14 specific
 | **P1** | `order-history.spec.ts` | My Account Order List, Order Detail View, Tracking Error State | 3 | 0 | 3 | ⏸️ **SKIP** |
 | **P1** | `out-of-stock.spec.ts` | **(v1.7.0)** Dynamic Self-Healing OOS Discovery & CTA Disabled Check | 2 | 0 | 2 | ⏸️ **SKIP** |
 | **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | 1 | 1 | ✅ **PASS** |
-| **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED cart preservation pending human check`) | 3 | 3 | 0 | ✅ **PASS** |
+| **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED — annotated observation pending manual check`) | 3 | 3 | 0 | ✅ **PASS** |
 | **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings | 2 | 2 | 0 | ✅ **PASS** |
@@ -98,7 +98,7 @@ Our verification suite consists of **59 tests** distributed across **14 specific
 ```text
 ubuy-qa-automation/
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v1.7.0 version declaration
+├── package.json                # Scripts, dependencies, and v1.8.0 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
@@ -108,7 +108,8 @@ ubuy-qa-automation/
 │   ├── RELEASE_v1.4.0.md       # Release v1.4.0 publication notes
 │   ├── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
 │   ├── RELEASE_v1.6.0.md       # Release v1.6.0 publication notes
-│   └── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
+│   ├── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
+│   └── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry

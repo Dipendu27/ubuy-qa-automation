@@ -38,13 +38,19 @@ test.describe('Store Switcher — P1 Business Rules', () => {
   });
 
   // ⚠️ UNVERIFIED — Cart preservation across region switches contradicts site warning copy ("Switching between stores will remove products from your current cart"), pending manual confirmation by Dipendu Mukherjee.
-  test('confirming store switch preserves cart items across regions (production behavior)', async ({
+  test('store switch currently appears to preserve cart items (UNVERIFIED — pending manual confirmation, see discovery-log.md)', async ({
     homePage,
     productDetailPage,
     storeSwitcher,
     cartPage,
     page,
   }) => {
+    test.info().annotations.push({
+      type: 'unverified',
+      description:
+        'Cart preservation across region switches contradicts site warning copy; pending manual verification by Dipendu Mukherjee.',
+    });
+
     await test.step('Add a product to the cart', async () => {
       await page.goto(testProduct.url);
       await productDetailPage.addToCart(1);
