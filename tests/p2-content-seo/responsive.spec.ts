@@ -4,6 +4,8 @@
  * Verifies: homepage → PDP → cart on a mobile viewport.
  */
 
+import fs from 'node:fs';
+
 import { test, expect } from '../../src/fixtures/base.fixture.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
@@ -22,8 +24,26 @@ test.describe('Responsive Smoke Pass — P2 Content & SEO', () => {
       await expect(homePage.header).toBeVisible();
       await expect(homePage.searchBar).toBeVisible();
     });
+  });
 
-    await test.step('Verify visual snapshot baseline of mobile header (§4 Task 8)', async () => {
+  test('mobile header matches visual snapshot baseline (§4 Task 8)', async ({
+    homePage,
+  }, testInfo) => {
+    // Snapshot baselines are platform-suffixed (e.g. -win32.png, -linux.png) because
+    // font rendering differs per OS. Skip honestly — instead of failing or silently
+    // writing a new baseline — when no baseline is committed for this platform (v2.0.2).
+    const baselinePath = testInfo.snapshotPath('mobile-header-baseline.png');
+    test.skip(
+      !fs.existsSync(baselinePath),
+      `No visual baseline committed for ${process.platform}/${testInfo.project.name}. ` +
+        'Generate one with `npm run snapshots:update` (use Docker/xvfb on Linux) and commit the PNG.',
+    );
+
+    await test.step('Navigate to homepage on mobile viewport', async () => {
+      await homePage.goto();
+    });
+
+    await test.step('Verify visual snapshot baseline of mobile header', async () => {
       await expect(homePage.header).toHaveScreenshot('mobile-header-baseline.png', {
         maxDiffPixelRatio: 0.05,
       });

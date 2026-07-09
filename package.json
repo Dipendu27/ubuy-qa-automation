@@ -1,6 +1,6 @@
 {
   "name": "ubuy-qa-automation",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Production-grade E2E UI test automation framework for ubuy.co.in — Playwright + TypeScript, Page Object Model",
   "private": true,
   "type": "module",
@@ -13,6 +13,7 @@
     "test:chromium": "npx playwright test --project=chromium-desktop",
     "test:mobile": "npx playwright test --project=mobile-chrome",
     "test:safety": "node scripts/enforce-no-place-order.mjs",
+    "snapshots:update": "npx playwright test tests/p2-content-seo/responsive.spec.ts --project=chromium-desktop --update-snapshots",
     "report": "npx playwright show-report reports/html",
     "lint": "eslint src/ tests/ --ext .ts && npm run test:safety",
     "lint:fix": "eslint src/ tests/ --ext .ts --fix && npm run test:safety",

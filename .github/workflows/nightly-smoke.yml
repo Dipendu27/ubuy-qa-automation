@@ -10,6 +10,10 @@ on:
         description: 'Test suite to run (p0, p1, p2, or all)'
         required: false
         default: 'p0'
+      update_snapshots:
+        description: 'Regenerate Linux visual baselines and upload as artifact (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
   test:
@@ -38,6 +42,18 @@ jobs:
 
       - name: Install Playwright Browsers & OS Dependencies
         run: npx playwright install --with-deps chromium
+
+      - name: Regenerate Linux Visual Baselines (manual opt-in, v2.0.2 §H6)
+        if: github.event.inputs.update_snapshots == 'true'
+        run: xvfb-run npm run snapshots:update
+
+      - name: Upload Regenerated Linux Baselines
+        if: github.event.inputs.update_snapshots == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-visual-baselines-${{ github.run_id }}
+          path: tests/p2-content-seo/responsive.spec.ts-snapshots/
+          retention-days: 14
 
       - name: Run Playwright Tests with WAF Retry Mitigation (Headed via xvfb)
         run: |
