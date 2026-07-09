@@ -53,23 +53,45 @@ test.describe('Cart — P0 Critical Path', () => {
     });
   });
 
+  /**
+   * v2.0.1: Previously only asserted the post-update subtotal was > 0 — true
+   * even when recalculation silently failed. Now compares before/after and
+   * requires the new subtotal to be ≈2× the single-unit subtotal (1.5×–2.5×
+   * bounds absorb rounding, per-unit fees, and multi-buy discounts).
+   */
   test('quantity update recalculates totals', async ({ cartPage }) => {
+    let initialSubtotal = 0;
+
     await test.step('Navigate to cart page', async () => {
       await cartPage.goto();
     });
 
-    await test.step('Record initial subtotal', async () => {
-      const initialSubtotal = await cartPage.getSubtotal();
-      expect(CartPage.parsePrice(initialSubtotal)).toBeGreaterThan(0);
+    await test.step('Record initial subtotal (qty 1)', async () => {
+      initialSubtotal = CartPage.parsePrice(await cartPage.getSubtotal());
+      expect(initialSubtotal).toBeGreaterThan(0);
     });
 
     await test.step('Update quantity to 2', async () => {
       await cartPage.updateQuantity(0, 2);
     });
 
-    await test.step('Verify subtotal changed after quantity update', async () => {
-      const updatedSubtotal = await cartPage.getSubtotal();
-      expect(CartPage.parsePrice(updatedSubtotal)).toBeGreaterThan(0);
+    await test.step('Verify subtotal recalculated to ≈2× the initial subtotal', async () => {
+      // Deterministic wait: poll until the displayed subtotal differs from the
+      // qty-1 value (or time out) instead of relying on a fixed sleep.
+      await expect
+        .poll(async () => CartPage.parsePrice(await cartPage.getSubtotal()), {
+          message: 'Subtotal never changed after updating quantity to 2',
+          timeout: 20_000,
+        })
+        .not.toBe(initialSubtotal);
+
+      const updatedSubtotal = CartPage.parsePrice(await cartPage.getSubtotal());
+      // ≈2× with tolerance: strictly between 1.5× and 2.5× of the qty-1 subtotal.
+      expect(
+        updatedSubtotal,
+        `Expected ≈2× recalculation: initial=${initialSubtotal}, updated=${updatedSubtotal}`,
+      ).toBeGreaterThan(initialSubtotal * 1.5);
+      expect(updatedSubtotal).toBeLessThan(initialSubtotal * 2.5);
     });
   });
 
