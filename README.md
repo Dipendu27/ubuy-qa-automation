@@ -46,10 +46,11 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v1.7.0 Key Capabilities & Architectural Pillars
+## 🌟 Release v1.8.0 Key Capabilities & Architectural Pillars
 
-Release `v1.7.0` strengthens repository integrity, verification rigor, and self-healing automation across our 59-test suite:
+Release `v1.8.0` strengthens repository integrity, verification rigor, and self-healing automation across our 59-test suite:
 
+- **📋 Honest Test Title & Report Annotation Alignment (`v1.8.0`)**: Ensures test titles and runtime HTML report annotations (`test.info().annotations.push({ type: 'unverified' })`) strictly align with unverified documentation notes. Any test observing unconfirmed production behaviors carries explicit visual flags in test reports so results never imply false certainty.
 - **📋 Standing Verification Rigor Enforcement (§6.7)**: Hardcodes our zero-fabrication verification policy across documentation and tests. Any task gated on human verification stays visibly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or human confirmation is provided.
 - **⚡ Deduplicated Self-Healing Out-of-Stock Discovery (`src/utils/productDiscovery.ts`)**: Crawls live listings dynamically at runtime (`findCurrentOosProduct`) and hoists discovery into a shared `beforeAll` fixture setup, reducing production network traffic while making OOS tests self-healing against inventory fluctuations.
 - **📡 Conscious Network Interception Scope (`src/utils/apiSchema.ts`)**: Formally includes passive network contract validation on UI-triggered AJAX endpoints (`/search/`), asserting valid HTTP status ($\ge 200$) and JSON headers during genuine user interactions.
