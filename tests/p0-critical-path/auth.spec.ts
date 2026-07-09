@@ -73,9 +73,18 @@ test.describe('Authentication — P0 Critical Path', () => {
   });
 
   test.describe('Checkout Auth Gate', () => {
+    /**
+     * v2.0.1: The previous pass condition accepted any URL containing
+     * 'ubcheckout' — but the cart page itself lives at /ubcheckout/cart, so
+     * the test passed even if the checkout button did nothing. Now the test
+     * requires positive evidence of an auth gate: either a strict login/
+     * register URL, or a visible login form (inline/modal gate). A no-op
+     * click leaves neither and FAILS.
+     */
     test('guest user is redirected to login when attempting checkout', async ({
       productDetailPage,
       cartPage,
+      loginPage,
       page,
     }) => {
       const testProduct = productsData.products[0];
@@ -101,15 +110,25 @@ test.describe('Authentication — P0 Critical Path', () => {
       });
 
       await test.step('Verify redirected to login or auth gate', async () => {
-        const url = page.url();
-        // Should be on login page or a checkout auth page
-        const isAuthPage =
-          url.includes('/customer/account/login') ||
-          url.includes('/customer/account/create') ||
-          url.includes('login') ||
-          url.includes('signin') ||
-          url.includes('ubcheckout');
-        expect(isAuthPage).toBeTruthy();
+        // Strict auth-page URL patterns only — no bare 'login'/'ubcheckout'
+        // substring matches (the cart itself is /ubcheckout/cart).
+        const authUrlPattern = /\/customer\/account\/(login|create)|\/(signin|sign-in)(\/|\?|$)/;
+
+        // Give a redirect-style gate time to land.
+        const redirectedToAuthPage = await page
+          .waitForURL(authUrlPattern, { timeout: 15_000 })
+          .then(() => true)
+          .catch(() => false);
+
+        if (redirectedToAuthPage) {
+          // Redirect gate: strict auth URL, and we must have LEFT the cart page.
+          expect(page.url()).toMatch(authUrlPattern);
+          expect(page.url()).not.toMatch(/\/ubcheckout\/cart/);
+        } else {
+          // Inline/modal gate: a login form must be visible on top of the page.
+          // If the checkout click did nothing (no redirect, no form), this fails.
+          await loginPage.expectFormRendered();
+        }
       });
     });
   });
