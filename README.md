@@ -37,7 +37,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 > **NON-NEGOTIABLE ZERO-PAYMENT PRODUCTION SAFETY**  
 > Because this framework runs against live e-commerce production servers (`ubuy.co.in`), multiple hardcoded safety gates prevent any accidental financial transactions or server disruption:
 >
-> 1. **🚫 Built-In CI Safety Gate (`npm run test:safety`):** Before tests run, `scripts/enforce-no-place-order.mjs` scans every Page Object, test specification, and utility across the codebase to guarantee **zero references to real order submission (`placeOrder()`)**.
+> 1. **🚫 Built-In CI Safety Gate (`npm run test:safety`):** Before tests run, `scripts/enforce-no-place-order.mjs` recursively scans **the entire `src/` tree** (pages, components, locators, fixtures, utils, config) **and `tests/`** — covering `.ts`, `.tsx`, `.js`, and `.mjs` files — to guarantee **zero references to real order submission (`placeOrder()`)**. No order-placement selector exists anywhere in the codebase, by design (v2.0.1: previously only `src/pages/`, `src/components/`, and `tests/` were scanned, leaving `src/locators/` unchecked).
 > 2. **🛑 Hard Stop Before Payment Submission:** Checkout workflows inspect shipping and payment step summaries but intentionally halt before order placement.
 > 3. **🧵 Rate-Limited Serial Execution (`workers: 1`):** Configured in `playwright.config.ts` to execute sequentially, protecting production infrastructure from concurrency spikes.
 > 4. **⏱️ Built-In Human Cadence Throttling (`throttle()`):** Automatically injects realistic think-time delays (`src/utils/throttle.ts`) to prevent aggressive request bursts.

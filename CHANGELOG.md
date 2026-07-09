@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-07-10
+
+### Security
+- **Safety Guardrail Blind Spot Closed (`scripts/enforce-no-place-order.mjs` Task 1)**: The scanner previously checked only `src/pages/`, `src/components/`, and `tests/` — `src/locators/checkout.locators.ts` contained an unscanned `placeOrderBtn` selector. The selector has been **deleted** (replaced with an explicit "absent by design" comment) and the scanner now recursively scans **all of `src/` and `tests/`**, including `.ts`, `.tsx`, `.js`, and `.mjs` files. Verified: a planted `placeOrderBtn` in `src/locators/` now fails the gate.
+
+### Fixed
+- **Store Switcher Network Spec Rewritten (`store-switcher-network.spec.ts` Task 2)**: The prior "network-verified" test asserted only `cookies.length > 0`, dropdown options `> 0`, and `url.includes('ubuy')` — all tautologies. Rewritten to observe real HTTP responses during the switch (must be 2xx/3xx), diff the before/after cookie jar (must change), and restore the India store afterward.
+- **Checkout Auth Gate Tautology (`auth.spec.ts` Task 3)**: Pass condition accepted any URL containing `ubcheckout` — but the cart page itself is `/ubcheckout/cart`, so a no-op checkout click passed. Now requires a strict login/register URL pattern **or** a visible login form, and rejects remaining on the cart URL.
+- **Cart Quantity Recalculation (`cart.spec.ts` Task 4)**: Previously only asserted post-update subtotal `> 0`. Now polls until the subtotal changes and asserts the updated subtotal is ≈2× the initial (1.5×–2.5× bounds).
+- **`LoginPage.expectErrorMessage` Dead-Page Pass (Task 5)**: `errorVisible || stillOnLogin` passed even when submit did nothing. Now requires a positive rejection signal: visible error element, or a re-rendered login form with a **reset password field**.
+- **`if visible → expect visible` No-Ops Removed (`StoreSwitcher.ts` Task 6)**: `open()` and `expectConfirmModalVisible()` now assert unconditionally (with a hover-retry for the dropdown). `switchStoreAndConfirm`/`switchStoreAndCancel` return a `modalAppeared` boolean, asserted by store-switcher specs when the cart is known non-empty. `LoginPage.expectSocialLoginVisible` rewritten as an unconditional `Locator.or()` web-first assertion.
+- **Static Pages Soft-404 Detection (`static-pages.spec.ts` Task 7)**: The "HTTP 200" step never checked a status code. Now asserts the navigation response status is 200 and that the title/body contain no error markers (`404`, `not found`, `access denied`, `attention required`).
+- **Traceability Matrix Regenerated (`docs/traceability.md` Task 8)**: Rebuilt from `npx playwright test --list` ground truth (62 tests). Corrected drifted rows (e.g., the matrix claimed a test `confirming store switch clears the cart` while the actual test asserts preservation and is UNVERIFIED) and introduced honest statuses for credential-gated and discovery-dependent skips.
+
 ## [2.0.0] - 2026-07-09
 
 ### Added
