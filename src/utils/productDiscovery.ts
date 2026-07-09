@@ -6,6 +6,7 @@
  */
 
 import { Page } from '@playwright/test';
+import { env } from '../config/env.js';
 import { logger } from './logger.js';
 
 export interface DiscoveredProduct {
@@ -56,7 +57,8 @@ export async function findCurrentOosProduct(
     `Searching for dynamic OOS product with keyword: "${searchKeyword}"`,
   );
 
-  await page.goto(`https://www.ubuy.co.in/search/?q=${encodeURIComponent(searchKeyword)}`);
+  // Respect BASE_URL so staging-environment runs are not silently redirected to production (v2.0.2)
+  await page.goto(`${env.baseUrl}/search/?q=${encodeURIComponent(searchKeyword)}`);
 
   // Look for product cards or badges indicating out of stock status
   const oosCard = page
