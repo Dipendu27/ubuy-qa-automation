@@ -56,15 +56,40 @@ export class LoginPage {
     await expect(this.submitBtn).toBeVisible();
   }
 
-  /** Assert an error message is displayed after invalid login */
+  /**
+   * Assert the login attempt was REJECTED.
+   *
+   * v2.0.1: Previously asserted `errorVisible || stillOnLogin` — a dead submit
+   * button (no error, no navigation) still satisfied `stillOnLogin`, so the
+   * assertion could never fail. Now requires a positive rejection signal:
+   * either the error element becomes visible, or the login page re-rendered
+   * with a RESET (empty) password field — evidence of a rejected round-trip,
+   * not mere absence of navigation. A dead page (typed password still present,
+   * no error) fails both branches.
+   */
   async expectErrorMessage(): Promise<void> {
-    // Ubuy may show errors via AJAX in div.error.text-danger,
-    // or the page may reload with an error message, or the URL stays the same
-    // We check both: error div with text, or still on login page
-    const errorVisible = await this.errorMessage.isVisible().catch(() => false);
-    const url = this.page.url();
-    const stillOnLogin = url.includes('/customer/account/login');
-    expect(errorVisible || stillOnLogin).toBeTruthy();
+    // Primary positive signal: error element (AJAX div.error.text-danger) appears.
+    const errorAppeared = await this.errorMessage
+      .waitFor({ state: 'visible', timeout: 10_000 })
+      .then(() => true)
+      .catch(() => false);
+
+    if (errorAppeared) {
+      await expect(this.errorMessage).toBeVisible();
+      return;
+    }
+
+    // Fallback: page reloaded the login form without a persistent DOM error
+    // element. Require evidence of a rejected round-trip.
+    expect(this.page.url(), 'Rejected login must remain on the login page').toContain(
+      '/customer/account/login',
+    );
+    await expect(this.emailInput).toBeVisible();
+    await expect(this.passwordInput).toBeVisible();
+    await expect(
+      this.passwordInput,
+      'Password field must be reset after a rejected login round-trip — a still-populated field means the submit did nothing',
+    ).toHaveValue('');
   }
 
   /** Assert the error message contains specific text */
@@ -73,13 +98,19 @@ export class LoginPage {
     await expect(this.errorMessage).toContainText(text);
   }
 
-  /** Assert social login options are visible */
+  /**
+   * Assert social login options are visible.
+   *
+   * v2.0.1: Rewritten as an unconditional web-first assertion via Locator.or()
+   * — fails with a proper timeout/diff instead of a bare boolean expect.
+   */
   async expectSocialLoginVisible(): Promise<void> {
     const socialBtn = this.page.locator(accountLocators.login.socialLoginBtn).first();
-    const visible = await socialBtn.isVisible().catch(() => false);
-    const googleVisible = await this.socialLoginGoogle.isVisible().catch(() => false);
-    const facebookVisible = await this.socialLoginFacebook.isVisible().catch(() => false);
-    expect(visible || googleVisible || facebookVisible).toBeTruthy();
+    const anySocialLogin = socialBtn
+      .or(this.socialLoginGoogle)
+      .or(this.socialLoginFacebook)
+      .first();
+    await expect(anySocialLogin).toBeVisible({ timeout: 10_000 });
   }
 
   /** Click the "Sign Up" tab to go to register */
