@@ -66,10 +66,10 @@ Release `v2.0.0` represents a major architectural upgrade ("Autonomous Coverage"
 
 ## 📊 Comprehensive Test Matrix & Live Runtime Status
 
-Our verification suite consists of **61 tests** distributed across **15 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
+Our verification suite consists of **62 tests** distributed across **16 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
 
 ```
-  50 active tests passed (100% Pass Rate across all guest, dynamic inventory & unit regression flows)
+  51 active tests passed (100% Pass Rate across all guest, dynamic inventory & unit regression flows)
   11 skipped cleanly (awaiting dedicated test account credentials per prompt §2)
    0 failed
 ```
@@ -142,7 +142,7 @@ ubuy-qa-automation/
 ## 🚀 Getting Started & Environment Configuration
 
 ### Prerequisites
-- **Node.js**: `v18.0.0` or higher
+- **Node.js**: `v20.0.0` or higher
 - **npm**: `v9.0.0` or higher
 
 ### 1. Clone & Install
@@ -196,7 +196,7 @@ npm run lint
 
 ### Executing Test Suites against Live Production
 ```bash
-# Run the entire 59-test suite (Chromium Desktop)
+# Run the entire 62-test suite
 npm test
 
 # Execute by Priority Tier
@@ -239,6 +239,6 @@ When running automated tests against enterprise CDNs like Cloudflare, datacenter
 
 ## 📋 License & Contributing
 
-Distributed under the **MIT License**. See [`LICENSE`](file:///c:/Users/ubuy1/OneDrive/Desktop/ubuy-qa-automation/LICENSE) for full legal text.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full legal text.
 
 Designed and hardened for **Ubuy India Quality Assurance Engineering**. Contributions adhering to zero-payment safety rules and Prettier/TypeScript strict standards are welcome!
