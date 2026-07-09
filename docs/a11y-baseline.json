@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.10.0",
+  "description": "Tracked technical debt baseline of pre-existing production accessibility issues per Standing Verification Rigor Rule (§6.7). Tests fail only when NEW un-baselined critical/serious violations occur.",
+  "baselineCount": 12,
+  "baseline": [
+    {
+      "ruleId": "color-contrast",
+      "target": ".trustpilot-widget",
+      "page": "*",
+      "notes": "Pre-existing third-party badge contrast on storefront"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".banner-discount-tag",
+      "page": "*",
+      "notes": "Promotional banner contrast ratio below WCAG AA threshold"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".footer-copyright-text",
+      "page": "*",
+      "notes": "Muted grey copyright text contrast in footer"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".search-placeholder",
+      "page": "Homepage",
+      "notes": "Search bar placeholder contrast ratio"
+    },
+    {
+      "ruleId": "list",
+      "target": ".breadcrumb-nav",
+      "page": "*",
+      "notes": "Legacy breadcrumbs markup lacking strict ul/ol nesting"
+    },
+    {
+      "ruleId": "list",
+      "target": ".footer-links-grid",
+      "page": "*",
+      "notes": "Footer links container list structure"
+    },
+    {
+      "ruleId": "listitem",
+      "target": ".breadcrumb-item",
+      "page": "*",
+      "notes": "Legacy breadcrumbs listitem container"
+    },
+    {
+      "ruleId": "listitem",
+      "target": ".footer-link-item",
+      "page": "*",
+      "notes": "Footer navigation item element parent wrapper"
+    },
+    {
+      "ruleId": "label-title-only",
+      "target": ".header-search-input",
+      "page": "*",
+      "notes": "Header search input visible label alignment"
+    },
+    {
+      "ruleId": "label-title-only",
+      "target": ".quantity-input",
+      "page": "Cart",
+      "notes": "Cart quantity adjuster input label title attribute"
+    },
+    {
+      "ruleId": "scrollable-region-focusable",
+      "target": ".table-responsive",
+      "page": "*",
+      "notes": "Responsive specification table scrollable container tabindex"
+    },
+    {
+      "ruleId": "scrollable-region-focusable",
+      "target": ".product-gallery-scroll",
+      "page": "PDP",
+      "notes": "Product detail page thumbnail carousel scrollable region"
+    }
+  ]
+}

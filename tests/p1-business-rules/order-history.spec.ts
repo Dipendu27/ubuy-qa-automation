@@ -36,9 +36,9 @@ test.describe('Order History & Tracking — P1 Business Rules', () => {
     });
 
     await test.step('Check if order history is visible', async () => {
-      // May be empty if no past orders — just verify the section loads
+      await myAccountPage.expectOrderHistoryVisible();
       const orderCount = await myAccountPage.getOrderCount();
-      expect(orderCount).toBeGreaterThanOrEqual(0);
+      expect(orderCount).toBeGreaterThan(0);
     });
   });
 

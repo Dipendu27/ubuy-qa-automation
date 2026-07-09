@@ -4,7 +4,7 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.9.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v1.10.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
 ![Test Status](https://img.shields.io/badge/Tests-50%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
@@ -20,7 +20,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 ## 📑 Table of Contents
 
 1. [🛑 Financial & Infrastructure Safety Guardrails](#-financial--infrastructure-safety-guardrails)
-2. [🌟 Release v1.9.0 Key Capabilities & Architectural Pillars](#-release-v190-key-capabilities--architectural-pillars)
+2. [🌟 Release v1.10.0 Key Capabilities & Architectural Pillars](#-release-v1100-key-capabilities--architectural-pillars)
 3. [📊 Comprehensive Test Matrix & Live Runtime Status](#-comprehensive-test-matrix--live-runtime-status)
 4. [🏗️ Architectural Overview & Directory Structure](#-architectural-overview--directory-structure)
 5. [🚀 Getting Started & Environment Configuration](#-getting-started--environment-configuration)
@@ -46,18 +46,18 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v1.9.0 Key Capabilities & Architectural Pillars
+## 🌟 Release v1.10.0 Key Capabilities & Architectural Pillars
 
-Release `v1.9.0` hardens test assertion rigor, network listening precision, and price parsing regression verification across our 61-test suite:
+Release `v1.10.0` implements a formal accessibility technical debt ratchet and hardens test assertions across our 61-test suite:
 
-- **🔍 Tautological Assertion Elimination (`v1.9.0`)**: Replaced non-failing assertion patterns (`toBeDefined()`, `>= 0` on timings) with rigorous boolean assertions (`expect(audit.passed).toBe(true)`, `expect(contract.valid).toBe(true)`), ensuring performance and API schema violations explicitly fail tests.
-- **📡 Logical Network Predicate Precision (`v1.9.0`)**: Grouped `waitForResponse` predicates (`&&` instead of loose `||`) in API contract tests to guarantee interception matches the exact target AJAX endpoint (`/search`) rather than unrelated HTTP 200 static assets.
+- **♿ Tracked Accessibility Baseline Ratchet (`v1.10.0`)**: Replaced blanket `.disableRules()` in `src/utils/a11y.ts` with a committed technical debt baseline (`docs/a11y-baseline.json`) tracking 12 legacy production issues (`color-contrast`, `list`, `listitem`, `label-title-only`, `scrollable-region-focusable`). Known legacy debt is logged informative while any new un-baselined critical/serious violations fail CI.
+- **🔍 Tautological Assertion Elimination (`v1.10.0`)**: Hardened `store-switcher-currency.spec.ts` and `order-history.spec.ts` to replace non-failing `>= 0` count checks with strict DOM visibility and positive item count checks (`toBeGreaterThan(0)`).
+- **📋 Honest Test Title & Scope Alignment (`v1.10.0`)**: Renamed store switcher header region test to `"header store switcher trigger displays interactive region dropdown options"` to accurately describe scope without claiming multi-currency switching.
+- **🔍 Tautological Performance & API Assertion Hardening (`v1.9.0`)**: Replaced non-failing assertion patterns with rigorous boolean assertions (`expect(audit.passed).toBe(true)`, `expect(contract.valid).toBe(true)`), and grouped `waitForResponse` predicates (`&&`) to intercept exact `/search` endpoints.
 - **💰 Price Parsing Regression Suite (`v1.9.0`)**: Added `tests/p1-business-rules/price-parsing.spec.ts` to guard against currency parsing fragilities and document live currency prefix format requirements.
-- **📋 Honest Test Title & Report Annotation Alignment (`v1.8.0`)**: Ensures test titles and runtime HTML report annotations (`test.info().annotations.push({ type: 'unverified' })`) strictly align with unverified documentation notes so results never imply false certainty.
+- **📋 Honest Test Report Annotation Alignment (`v1.8.0`)**: Ensures test titles and runtime HTML report annotations (`test.info().annotations.push({ type: 'unverified' })`) strictly align with unverified documentation notes so results never imply false certainty.
 - **📋 Standing Verification Rigor Enforcement (§6.7)**: Hardcodes our zero-fabrication verification policy across documentation and tests. Any task gated on human verification stays visibly open (`⚠️ UNVERIFIED — pending manual confirmation`) until explicit evidence or human confirmation is provided.
 - **⚡ Deduplicated Self-Healing Out-of-Stock Discovery (`src/utils/productDiscovery.ts`)**: Crawls live listings dynamically at runtime (`findCurrentOosProduct`) and hoists discovery into a shared `beforeAll` fixture setup.
-- **⚡ Core Web Vitals Performance Budgeting (`src/utils/performance.ts`)**: Enforces non-breaking performance budgets across critical P0 pages.
-- **♿ Automated Accessibility Scans (`@axe-core/playwright`)**: Scans core user flows (`Homepage`, `Search Results`, `PDP`, `Cart`) for WCAG accessibility compliance.
 
 ---
 
@@ -102,19 +102,21 @@ Our verification suite consists of **61 tests** distributed across **15 specific
 ```text
 ubuy-qa-automation/
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v1.9.0 version declaration
+├── package.json                # Scripts, dependencies, and v1.10.0 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
 │   └── enforce-no-place-order.mjs  # Load-bearing CI safety guardrail script
 ├── docs/                       # Comprehensive documentation & release notes
+│   ├── a11y-baseline.json      # Tracked technical debt baseline of 12 legacy production a11y issues
 │   ├── discovery-log.md        # Live site discovery log & Standing Verification Rigor Rule (§6.7)
 │   ├── RELEASE_v1.4.0.md       # Release v1.4.0 publication notes
 │   ├── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
 │   ├── RELEASE_v1.6.0.md       # Release v1.6.0 publication notes
 │   ├── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
 │   ├── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
-│   └── RELEASE_v1.9.0.md       # Release v1.9.0 publication notes
+│   ├── RELEASE_v1.9.0.md       # Release v1.9.0 publication notes
+│   └── RELEASE_v1.10.0.md      # Release v1.10.0 publication notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry
