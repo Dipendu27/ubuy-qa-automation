@@ -4,9 +4,9 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v1.10.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v2.0.0-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
-![Test Status](https://img.shields.io/badge/Tests-50%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
+![Test Status](https://img.shields.io/badge/Tests-51%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
 </div>
@@ -20,7 +20,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 ## 📑 Table of Contents
 
 1. [🛑 Financial & Infrastructure Safety Guardrails](#-financial--infrastructure-safety-guardrails)
-2. [🌟 Release v1.10.0 Key Capabilities & Architectural Pillars](#-release-v1100-key-capabilities--architectural-pillars)
+2. [🌟 Release v2.0.0 Key Capabilities & Architectural Pillars](#-release-v200-key-capabilities--architectural-pillars)
 3. [📊 Comprehensive Test Matrix & Live Runtime Status](#-comprehensive-test-matrix--live-runtime-status)
 4. [🏗️ Architectural Overview & Directory Structure](#-architectural-overview--directory-structure)
 5. [🚀 Getting Started & Environment Configuration](#-getting-started--environment-configuration)
@@ -46,10 +46,13 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v1.10.0 Key Capabilities & Architectural Pillars
+## 🌟 Release v2.0.0 Key Capabilities & Architectural Pillars
 
-Release `v1.10.0` implements a formal accessibility technical debt ratchet and hardens test assertions across our 61-test suite:
+Release `v2.0.0` represents a major architectural upgrade ("Autonomous Coverage"), introducing ephemeral identity provisioning, network-level server state verification, and complete Docker containerization across our 62-test suite:
 
+- **🤖 Autonomous Ephemeral Identity Provisioning (`v2.0.0`)**: Added `src/utils/identityProvisioning.ts` to autonomously provision test identities (`ubuy.qa.bot+{timestamp}@qa.ubuy.co.in`) with live OTP verification discovery and CAPTCHA safety handling (§0.1).
+- **📡 Network-Level Store Switcher Verification (`v2.0.0`)**: Added `tests/p1-business-rules/store-switcher-network.spec.ts` alongside UI observation to inspect server-side session state across regional store boundaries (`✅ NETWORK-VERIFIED`).
+- **🐳 Production Docker Containerization (`v2.0.0`)**: Added `Dockerfile` based on official Playwright Ubuntu Jammy container (`mcr.microsoft.com/playwright:v1.52.0-jammy`) for strict environment parity across local, CI, and self-hosted runners.
 - **♿ Tracked Accessibility Baseline Ratchet (`v1.10.0`)**: Replaced blanket `.disableRules()` in `src/utils/a11y.ts` with a committed technical debt baseline (`docs/a11y-baseline.json`) tracking 12 legacy production issues (`color-contrast`, `list`, `listitem`, `label-title-only`, `scrollable-region-focusable`). Known legacy debt is logged informative while any new un-baselined critical/serious violations fail CI.
 - **🔍 Tautological Assertion Elimination (`v1.10.0`)**: Hardened `store-switcher-currency.spec.ts` and `order-history.spec.ts` to replace non-failing `>= 0` count checks with strict DOM visibility and positive item count checks (`toBeGreaterThan(0)`).
 - **📋 Honest Test Title & Scope Alignment (`v1.10.0`)**: Renamed store switcher header region test to `"header store switcher trigger displays interactive region dropdown options"` to accurately describe scope without claiming multi-currency switching.
@@ -89,11 +92,12 @@ Our verification suite consists of **61 tests** distributed across **15 specific
 | **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | 1 | 1 | ✅ **PASS** |
 | **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED — annotated observation pending manual check`) | 3 | 3 | 0 | ✅ **PASS** |
 | **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
+| **P1** | `store-switcher-network.spec.ts` | **(v2.0.0)** Network-Level Server Session Cart Audit (`✅ NETWORK-VERIFIED`) | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | 1 | 0 | ✅ **PASS** |
 | **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings (`v1.9.0 assertion fix`) | 2 | 2 | 0 | ✅ **PASS** |
 | **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification (Homepage, PDP, Cart) | 3 | 3 | 0 | ✅ **PASS** |
 | **P2** | `static-pages.spec.ts` | About Us, Contact, FAQ, Terms, Shipping, Warranty, ISO, App, Reviews | 10 | 10 | 0 | ✅ **PASS** |
-| **TOTAL** | **15 Spec Files** | **Complete Production E2E & Regression Coverage** | **61** | **50** | **11** | **100% Pass** |
+| **TOTAL** | **16 Spec Files** | **Complete Production E2E & Regression Coverage** | **62** | **51** | **11** | **100% Pass** |
 
 ---
 
@@ -101,8 +105,10 @@ Our verification suite consists of **61 tests** distributed across **15 specific
 
 ```text
 ubuy-qa-automation/
+├── Dockerfile                  # Official Playwright Ubuntu Jammy container build
+├── .dockerignore               # Build exclusion filters for containerization
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v1.10.0 version declaration
+├── package.json                # Scripts, dependencies, and v2.0.0 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
@@ -116,14 +122,15 @@ ubuy-qa-automation/
 │   ├── RELEASE_v1.7.0.md       # Release v1.7.0 publication notes
 │   ├── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
 │   ├── RELEASE_v1.9.0.md       # Release v1.9.0 publication notes
-│   └── RELEASE_v1.10.0.md      # Release v1.10.0 publication notes
+│   ├── RELEASE_v1.10.0.md      # Release v1.10.0 publication notes
+│   └── RELEASE_v2.0.0.md       # Release v2.0.0 publication notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry
 │   ├── pages/                  # Page Object Model classes (Home, PDP, Cart, Checkout, etc.)
 │   ├── components/             # Reusable UI components (StoreSwitcher.ts)
 │   ├── fixtures/               # Lazy POM fixtures with automated Cloudflare WAF detection
-│   └── utils/                  # Core Web Vitals, API Schema, Product Discovery & Throttling
+│   └── utils/                  # Core Web Vitals, API Schema, Identity Provisioning & Throttling
 └── tests/
     ├── p0-critical-path/       # P0 Critical Path smoke suites
     ├── p1-business-rules/      # P1 Business rules & cross-border suites
@@ -156,6 +163,16 @@ Populate `.env` with your dedicated test account details once provisioned:
 BASE_URL=https://www.ubuy.co.in
 TEST_USER_EMAIL=qa-test-account@example.com
 TEST_USER_PASSWORD=your-secure-test-password
+```
+
+### 3. Docker Container Execution (`v2.0.0`)
+Build and run the official Playwright container environment:
+```bash
+# Build production test container (verifies safety guardrail on build)
+docker build -t ubuy-qa-automation:v2.0.0 .
+
+# Execute E2E suite inside container
+docker run --rm --env-file .env ubuy-qa-automation:v2.0.0
 ```
 
 ---

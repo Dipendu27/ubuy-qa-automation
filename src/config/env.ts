@@ -25,4 +25,14 @@ export const env = {
 
   /** Whether to run headless (overrides playwright.config default) */
   headless: process.env.HEADLESS === 'true',
+
+  /** Whether real test credentials are configured in environment variables */
+  get hasRealCreds(): boolean {
+    return Boolean(
+      this.testUserEmail &&
+      this.testUserPassword &&
+      !this.testUserEmail.includes('example.com') &&
+      !this.testUserPassword.includes('your-test'),
+    );
+  },
 } as const;

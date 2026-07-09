@@ -9,7 +9,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import { env } from '../../src/config/env.js';
+import { ensureAuthenticatedIdentityOrSkip } from '../../src/utils/identityProvisioning.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Authentication — P0 Critical Path', () => {
@@ -38,24 +38,17 @@ test.describe('Authentication — P0 Critical Path', () => {
       });
     });
 
-    test('login with valid credentials succeeds', async ({ loginPage, page }) => {
-      // Skip if no real test credentials configured (detect placeholders)
-      const hasRealCreds =
-        env.testUserEmail &&
-        env.testUserPassword &&
-        !env.testUserEmail.includes('example.com') &&
-        !env.testUserPassword.includes('your-test');
-      test.skip(
-        !hasRealCreds,
-        'Test credentials not configured in .env (placeholder values detected)',
-      );
+    test('login with valid credentials succeeds', async ({ loginPage, page }, testInfo) => {
+      const creds = await ensureAuthenticatedIdentityOrSkip(page, testInfo);
+      test.skip(!creds, 'Ephemeral test identity or real credentials required');
+      if (!creds) return;
 
       await test.step('Navigate to login page', async () => {
         await loginPage.goto();
       });
 
       await test.step('Login with valid credentials', async () => {
-        await loginPage.login(env.testUserEmail, env.testUserPassword);
+        await loginPage.login(creds.email, creds.password);
       });
 
       await test.step('Verify login succeeded — redirected away from login page', async () => {

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-07-09
+
+### Added
+- **Autonomous Ephemeral Identity Provisioning (`src/utils/identityProvisioning.ts` §1)**: Added automated test identity provisioning (`ubuy.qa.bot+{timestamp}@qa.ubuy.co.in`) with live OTP verification discovery and CAPTCHA safety handling per §0.1.
+- **Network-Level Store Switcher Verification (`store-switcher-network.spec.ts` §2)**: Added network-level server session audit alongside UI observation and recorded `✅ NETWORK-VERIFIED` discovery log status.
+- **Production Docker Containerization (`Dockerfile` & `.dockerignore` §4.1)**: Added official Playwright Ubuntu Jammy container setup for environment parity across local, CI, and self-hosted runners.
+
 ## [1.10.0] - 2026-07-09
 
 ### Added

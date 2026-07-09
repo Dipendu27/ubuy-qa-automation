@@ -7,7 +7,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import { env } from '../../src/config/env.js';
+import { ensureAuthenticatedIdentityOrSkip } from '../../src/utils/identityProvisioning.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 import addressesData from '../../src/fixtures/test-data/addresses.json' with { type: 'json' };
 
@@ -22,17 +22,14 @@ test.describe('Shipping Calculation — P1 Business Rules', () => {
     addressStep,
     shippingStep,
     page,
-  }) => {
-    const hasRealCreds =
-      env.testUserEmail &&
-      env.testUserPassword &&
-      !env.testUserEmail.includes('example.com') &&
-      !env.testUserPassword.includes('your-test');
-    test.skip(!hasRealCreds, 'Real test credentials not configured in .env');
+  }, testInfo) => {
+    const creds = await ensureAuthenticatedIdentityOrSkip(page, testInfo);
+    test.skip(!creds, 'Ephemeral test identity or real credentials required');
+    if (!creds) return;
 
     // Login
     await loginPage.goto();
-    await loginPage.login(env.testUserEmail, env.testUserPassword);
+    await loginPage.login(creds.email, creds.password);
 
     await test.step('Add 1 item to cart', async () => {
       await page.goto(testProduct.url);

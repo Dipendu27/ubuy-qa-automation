@@ -8,18 +8,15 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import { env } from '../../src/config/env.js';
+import { ensureAuthenticatedIdentityOrSkip } from '../../src/utils/identityProvisioning.js';
 
 test.describe('Order History & Tracking — P1 Business Rules', () => {
-  test.beforeEach(async ({ loginPage }) => {
-    const hasRealCreds =
-      env.testUserEmail &&
-      env.testUserPassword &&
-      !env.testUserEmail.includes('example.com') &&
-      !env.testUserPassword.includes('your-test');
-    test.skip(!hasRealCreds, 'Real test credentials not configured in .env');
+  test.beforeEach(async ({ loginPage, page }, testInfo) => {
+    const creds = await ensureAuthenticatedIdentityOrSkip(page, testInfo);
+    test.skip(!creds, 'Ephemeral test identity or real credentials required');
+    if (!creds) return;
     await loginPage.goto();
-    await loginPage.login(env.testUserEmail, env.testUserPassword);
+    await loginPage.login(creds.email, creds.password);
   });
 
   test('order history page is accessible from my account', async ({ myAccountPage }) => {

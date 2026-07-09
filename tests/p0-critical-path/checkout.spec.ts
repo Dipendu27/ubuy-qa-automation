@@ -10,7 +10,7 @@
  */
 
 import { test, expect } from '../../src/fixtures/base.fixture.js';
-import { env } from '../../src/config/env.js';
+import { ensureAuthenticatedIdentityOrSkip } from '../../src/utils/identityProvisioning.js';
 import addressesData from '../../src/fixtures/test-data/addresses.json' with { type: 'json' };
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
@@ -20,18 +20,14 @@ test.describe('Checkout Flow — P0 Critical Path', () => {
   const nonServiceableAddress = addressesData.nonServiceable[0];
 
   // All checkout tests require authentication
-  test.beforeEach(async ({ page, loginPage, productDetailPage }) => {
-    // Skip all checkout tests if no real credentials
-    const hasRealCreds =
-      env.testUserEmail &&
-      env.testUserPassword &&
-      !env.testUserEmail.includes('example.com') &&
-      !env.testUserPassword.includes('your-test');
-    test.skip(!hasRealCreds, 'Test credentials not configured (placeholder values detected)');
+  test.beforeEach(async ({ page, loginPage, productDetailPage }, testInfo) => {
+    const creds = await ensureAuthenticatedIdentityOrSkip(page, testInfo);
+    test.skip(!creds, 'Ephemeral test identity or real credentials required');
+    if (!creds) return;
 
     // Login first
     await loginPage.goto();
-    await loginPage.login(env.testUserEmail, env.testUserPassword);
+    await loginPage.login(creds.email, creds.password);
 
     // Add a product to cart
     await page.goto(testProduct.url);

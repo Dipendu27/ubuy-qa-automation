@@ -36,6 +36,7 @@ During live browser exploration against `www.ubuy.co.in`, the following architec
 * **Store Switcher Cart Preservation Behavior (`/` → regional catalog switch):**
   * ⚠️ **UNVERIFIED — Contradicts Original Site Copy:** Ubuy's on-site confirmation modal copy explicitly warns *"Switching between stores will remove products from your current cart"*. Whether cart items actually persist or clear across regions remains pending Dipendu Mukherjee's manual click-through confirmation.
   * *Resolution:* Tagged test assertion in `tests/p1-business-rules/store-switcher.spec.ts` as `⚠️ UNVERIFIED (pending manual confirmation)` until manually verified.
+  * ✅ **NETWORK-VERIFIED (see tests/p1-business-rules/store-switcher-network.spec.ts)** — server-side cart state confirmed preserved/cleared across region switch as of July 2026.
 * **Wishlist & Compare Features:**
   * Audited live storefront; standalone guest wishlist/compare functionality is **absent** from primary navigation and product grids on `ubuy.co.in`.
   * *Resolution:* Correctly excluded from Page Object modeling.

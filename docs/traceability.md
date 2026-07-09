@@ -55,6 +55,7 @@ This document is generated directly from ground-truth codebase test names (`test
 | Store switch cart modal | `tests/p1-business-rules/store-switcher.spec.ts` | `switching store with items in cart triggers confirm modal` | P1 | ✅ Automated & Passing |
 | Store switch confirm clear | `tests/p1-business-rules/store-switcher.spec.ts` | `confirming store switch clears the cart` | P1 | ✅ Automated & Passing |
 | Store switch cancel | `tests/p1-business-rules/store-switcher.spec.ts` | `cancelling store switch preserves the cart` | P1 | ✅ Automated & Passing |
+| Store switch network state | `tests/p1-business-rules/store-switcher-network.spec.ts` | `network verification: server-side cart session reset across regional store switch` | P1 | ✅ Automated & Passing (Network-Verified) |
 | Order history accessibility| `tests/p1-business-rules/order-history.spec.ts` | `order history page is accessible from my account` | P1 | 🔶 Automated — Blocked (needs test account) |
 | Order detail view | `tests/p1-business-rules/order-history.spec.ts` | `order detail view opens from order history` | P1 | 🔶 Automated — Blocked (needs test account) |
 | Track order invalid ID | `tests/p1-business-rules/order-history.spec.ts` | `track order with invalid ID shows error` | P1 | ✅ Automated & Passing |
