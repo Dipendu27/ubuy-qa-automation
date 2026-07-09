@@ -20,7 +20,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 ## 📑 Table of Contents
 
 1. [🛑 Financial & Infrastructure Safety Guardrails](#-financial--infrastructure-safety-guardrails)
-2. [🌟 Release v1.9.0 Key Capabilities](#-release-v190-key-capabilities)
+2. [🌟 Release v1.9.0 Key Capabilities & Architectural Pillars](#-release-v190-key-capabilities--architectural-pillars)
 3. [📊 Comprehensive Test Matrix & Live Runtime Status](#-comprehensive-test-matrix--live-runtime-status)
 4. [🏗️ Architectural Overview & Directory Structure](#-architectural-overview--directory-structure)
 5. [🚀 Getting Started & Environment Configuration](#-getting-started--environment-configuration)
