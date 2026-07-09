@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] - 2026-07-10
+
+**"Portability Patch"** — makes the suite runnable beyond a Windows workstation: Docker, Linux CI, and staging environments.
+
+### Fixed
+
+- **Docker image could not run the suite (H5):** `playwright.config.ts` hardcoded `headless: false` while the `HEADLESS` env var was dead code, and the container `CMD` launched headed Chromium with no display server. The config now wires `headless: env.headless` (headed remains the default per §5.1), and the Docker `CMD` wraps execution in `xvfb-run` with a virtual 1920x1080 display. `HEADLESS=true` opts into headless anywhere.
+- **Windows-only visual baseline (H6):** the mobile-header snapshot test failed (or silently wrote new baselines) on any non-win32 platform. The visual comparison is now a dedicated test that skips with an instructive reason when no baseline is committed for the current platform. Added `npm run snapshots:update` and a manual `update_snapshots` input on the nightly workflow that generates Linux baselines under xvfb and uploads them as an artifact.
+- **Hardcoded production URL in product discovery (M2):** `findCurrentOosProduct` navigated to `https://www.ubuy.co.in` directly, ignoring `BASE_URL`. It now derives the search URL from `env.baseUrl`, so staging runs stay on staging.
+- **Unprotected `beforeAll` discovery page (M3):** `out-of-stock.spec.ts` created a raw `browser.newPage()` that bypassed the auto WAF-check/cookie-banner fixture. The hook now applies the same cookie-banner suppression and runs the Cloudflare WAF check after discovery, converting WAF blocks into honest `environment-blocked-by-waf` skips instead of a misleading "no OOS product found".
+
+### Changed
+
+- `playwright.config.ts` now sources `baseURL` and `headless` from the centralized `src/config/env.ts` reader (removed direct `process.env`/dotenv duplication).
+- Test count: 62 → 63 (visual baseline comparison split into its own honestly-gated test); `docs/traceability.md` updated accordingly.
+- README Docker section documents headed-via-xvfb default, `HEADLESS=true` override, and Linux baseline generation.
+
 ## [2.0.1] - 2026-07-10
 
 ### Security

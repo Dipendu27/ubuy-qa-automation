@@ -169,10 +169,17 @@ TEST_USER_PASSWORD=your-secure-test-password
 Build and run the official Playwright container environment:
 ```bash
 # Build production test container (verifies safety guardrail on build)
-docker build -t ubuy-qa-automation:v2.0.0 .
+docker build -t ubuy-qa-automation:v2.0.2 .
 
 # Execute E2E suite inside container
-docker run --rm --env-file .env ubuy-qa-automation:v2.0.0
+# Runs HEADED inside a virtual display (xvfb-run baked into the image CMD) — §5.1 Cloudflare compatibility
+docker run --rm --env-file .env ubuy-qa-automation:v2.0.2
+
+# Optional: run headless instead (skips the virtual display)
+docker run --rm --env-file .env -e HEADLESS=true ubuy-qa-automation:v2.0.2 npx playwright test --project=chromium-desktop
+
+# Visual baselines are platform-suffixed; generate Linux baselines from inside the container:
+docker run --rm --env-file .env -v "$(pwd)/tests:/app/tests" ubuy-qa-automation:v2.0.2 xvfb-run npm run snapshots:update
 ```
 
 ---

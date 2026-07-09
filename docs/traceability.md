@@ -3,7 +3,7 @@
 This document maps user journeys, business requirements, and functional specifications to automated test specs across P0 (Critical Path), P1 (Business Rules), and P2 (Content & SEO).
 
 **Regenerated for v2.0.1** from ground truth: every test title below matches the output of
-`npx playwright test --list --project=chromium-desktop` (62 tests). Statuses are honest — a test
+`npx playwright test --list --project=chromium-desktop` (63 tests as of v2.0.2). Statuses are honest — a test
 that skips at runtime is never marked "Passing".
 
 ### Status Legend
@@ -83,6 +83,7 @@ that skips at runtime is never marked "Passing".
 | Homepage performance budget | `tests/p2-content-seo/performance.spec.ts` | `homepage navigation timings respect performance budget` | P2 | ✅ Passing |
 | PDP performance budget | `tests/p2-content-seo/performance.spec.ts` | `PDP navigation timings respect performance budget` | P2 | ✅ Passing |
 | Responsive mobile header | `tests/p2-content-seo/responsive.spec.ts` | `homepage renders correctly on mobile viewport` | P2 | ✅ Passing |
+| Mobile header visual baseline | `tests/p2-content-seo/responsive.spec.ts` | `mobile header matches visual snapshot baseline (§4 Task 8)` | P2 | ⏭️ Skips on platforms without a committed baseline (win32 baseline committed; generate Linux via `npm run snapshots:update`) |
 | Responsive mobile PDP | `tests/p2-content-seo/responsive.spec.ts` | `PDP renders correctly and allows add-to-cart on mobile viewport` | P2 | ✅ Passing |
 | Responsive mobile cart | `tests/p2-content-seo/responsive.spec.ts` | `cart page renders correctly on mobile viewport` | P2 | ✅ Passing |
 | About Us content | `tests/p2-content-seo/static-pages.spec.ts` | `About Us page loads and has content` | P2 | 🔄 Strengthened in v2.0.1 — pending live re-run |
@@ -98,4 +99,4 @@ that skips at runtime is never marked "Passing".
 
 ---
 
-**Totals:** 62 tests (31 P0 · 15 P1 · 16 P2) — 33 ✅ Passing · 8 ⏭️ needs credentials · 2 ⏭️ dynamic discovery · 2 🔶 UNVERIFIED behavior · 17 🔄 strengthened in v2.0.1 pending live re-run.
+**Totals:** 63 tests (31 P0 · 15 P1 · 17 P2) — 33 ✅ Passing · 8 ⏭️ needs credentials · 2 ⏭️ dynamic discovery · 1 ⏭️ platform-gated visual baseline · 2 🔶 UNVERIFIED behavior · 17 🔄 strengthened in v2.0.1 pending live re-run.
