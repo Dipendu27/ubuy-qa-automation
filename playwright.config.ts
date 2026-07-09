@@ -1,7 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { env } from './src/config/env.js';
 
 /**
  * Playwright configuration for Ubuy QA Automation Framework.
@@ -32,8 +30,10 @@ export default defineConfig({
     ['json', { outputFile: 'reports/results.json' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://www.ubuy.co.in',
-    headless: false, // Headed by default — real browser fingerprint, see §5.1
+    baseURL: env.baseUrl,
+    // Headed by default (HEADLESS unset/false) — real browser fingerprint, see §5.1.
+    // Set HEADLESS=true to run headless (e.g., containers without a display server).
+    headless: env.headless,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'retain-on-failure',
