@@ -4,9 +4,9 @@
 
 ![Playwright](https://img.shields.io/badge/Playwright-v1.52%2B-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Version](https://img.shields.io/badge/Release-v2.0.0-007ACC?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v2.0.2-007ACC?style=for-the-badge)
 ![Safety Gate](https://img.shields.io/badge/Safety_Gate-Zero_Payment_Guaranteed-FF4B4B?style=for-the-badge)
-![Test Status](https://img.shields.io/badge/Tests-51%20Passed%20%7C%2011%20Skipped%20%7C%200%20Failed-238636?style=for-the-badge)
+![Test Status](https://img.shields.io/badge/Tests-63%20Enumerated%20%7C%2019%20Specs-238636?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
 </div>
@@ -20,7 +20,7 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 ## 📑 Table of Contents
 
 1. [🛑 Financial & Infrastructure Safety Guardrails](#-financial--infrastructure-safety-guardrails)
-2. [🌟 Release v2.0.0 Key Capabilities & Architectural Pillars](#-release-v200-key-capabilities--architectural-pillars)
+2. [🌟 Release v2.0.2 Portability Patch & Architectural Pillars](#-release-v202-portability-patch--architectural-pillars)
 3. [📊 Comprehensive Test Matrix & Live Runtime Status](#-comprehensive-test-matrix--live-runtime-status)
 4. [🏗️ Architectural Overview & Directory Structure](#-architectural-overview--directory-structure)
 5. [🚀 Getting Started & Environment Configuration](#-getting-started--environment-configuration)
@@ -46,13 +46,18 @@ A production-grade, highly resilient end-to-end UI and API test automation frame
 
 ---
 
-## 🌟 Release v2.0.0 Key Capabilities & Architectural Pillars
+## 🌟 Release v2.0.2 Portability Patch & Architectural Pillars
 
-Release `v2.0.0` represents a major architectural upgrade ("Autonomous Coverage"), introducing ephemeral identity provisioning, network-level server state verification, and complete Docker containerization across our 62-test suite:
+Release `v2.0.2` is the current portability patch. It builds on the v2.0.0 autonomous coverage work and the v2.0.1 integrity patch by making the suite reproducible across Docker, Linux CI, and future staging environments while preserving the zero-payment production safety model.
 
+- **🐳 Docker Runtime Portability (`v2.0.2`)**: `playwright.config.ts` now uses the centralized `env.headless` flag, and the Docker `CMD` runs headed Chromium under `xvfb-run` by default. `HEADLESS=true` remains available for explicit headless runs.
+- **🖼️ Platform-Gated Visual Baselines (`v2.0.2`)**: The mobile header snapshot is now a dedicated test that skips honestly when the current OS baseline is not committed. `npm run snapshots:update` regenerates responsive baselines, and the nightly workflow can produce Linux baseline artifacts.
+- **🌐 Staging-Safe Product Discovery (`v2.0.2`)**: `findCurrentOosProduct` now derives URLs from `BASE_URL` via `src/config/env.ts`, preventing staging runs from silently leaking to production.
+- **🛡️ OOS Discovery WAF/Cookie Protection (`v2.0.2`)**: The raw `beforeAll` discovery page in `out-of-stock.spec.ts` now applies cookie-banner suppression and Cloudflare WAF detection, converting WAF blocks into honest `environment-blocked-by-waf` skips.
+- **🔍 Integrity Patch Hardening (`v2.0.1`)**: Expanded the safety scanner across all of `src/` and `tests/`, removed the order-placement locator surface, and strengthened formerly tautological assertions in cart, auth, store-switcher, and static-page coverage.
 - **🤖 Autonomous Ephemeral Identity Provisioning (`v2.0.0`)**: Added `src/utils/identityProvisioning.ts` to autonomously provision test identities (`ubuy.qa.bot+{timestamp}@qa.ubuy.co.in`) with live OTP verification discovery and CAPTCHA safety handling (§0.1).
 - **📡 Network-Level Store Switcher Verification (`v2.0.0`)**: Added `tests/p1-business-rules/store-switcher-network.spec.ts` alongside UI observation to inspect server-side session state across regional store boundaries (`✅ NETWORK-VERIFIED`).
-- **🐳 Production Docker Containerization (`v2.0.0`)**: Added `Dockerfile` based on official Playwright Ubuntu Jammy container (`mcr.microsoft.com/playwright:v1.52.0-jammy`) for strict environment parity across local, CI, and self-hosted runners.
+- **🐳 Production Docker Containerization (`v2.0.0`, hardened in `v2.0.2`)**: Added `Dockerfile` based on official Playwright Ubuntu Jammy container (`mcr.microsoft.com/playwright:v1.52.0-jammy`) for strict environment parity across local, CI, and self-hosted runners.
 - **♿ Tracked Accessibility Baseline Ratchet (`v1.10.0`)**: Replaced blanket `.disableRules()` in `src/utils/a11y.ts` with a committed technical debt baseline (`docs/a11y-baseline.json`) tracking 12 legacy production issues (`color-contrast`, `list`, `listitem`, `label-title-only`, `scrollable-region-focusable`). Known legacy debt is logged informative while any new un-baselined critical/serious violations fail CI.
 - **🔍 Tautological Assertion Elimination (`v1.10.0`)**: Hardened `store-switcher-currency.spec.ts` and `order-history.spec.ts` to replace non-failing `>= 0` count checks with strict DOM visibility and positive item count checks (`toBeGreaterThan(0)`).
 - **📋 Honest Test Title & Scope Alignment (`v1.10.0`)**: Renamed store switcher header region test to `"header store switcher trigger displays interactive region dropdown options"` to accurately describe scope without claiming multi-currency switching.
@@ -66,38 +71,38 @@ Release `v2.0.0` represents a major architectural upgrade ("Autonomous Coverage"
 
 ## 📊 Comprehensive Test Matrix & Live Runtime Status
 
-Our verification suite consists of **62 tests** distributed across **16 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
+Our verification suite consists of **63 tests** distributed across **19 specification files** under three priority tiers (`P0 Critical Path`, `P1 Business Rules`, `P2 Content & SEO`).
 
 ```
-  51 active tests passed (100% Pass Rate across all guest, dynamic inventory & unit regression flows)
-  11 skipped cleanly (awaiting dedicated test account credentials per prompt §2)
-   0 failed
+  npx playwright test --list --project=chromium-desktop  -> 63 tests in 19 files
+  npx playwright test --list --project=mobile-chrome     -> 63 tests in 19 files
+  Live headed production verification remains pending from a workstation/self-hosted runner
 ```
 
 ### Complete Suite Execution Matrix
 
-| Tier | Suite File | Coverage Scope | Total Tests | Passed | Skipped | Status |
-| :---: | :--- | :--- | :---: | :---: | :---: | :---: |
-| **P0** | `auth.spec.ts` | Login UI, Registration Form, Guest Checkout Redirect | 5 | 4 | 1 | ✅ **PASS** |
-| **P0** | `cart.spec.ts` | Cart Item Verification, Subtotals, Quantity Updates, Empty State | 4 | 4 | 0 | ✅ **PASS** |
-| **P0** | `checkout.spec.ts` | Serviceable PIN Check, Express Shipping, Order Summary Review | 4 | 0 | 4 | ⏸️ **SKIP** |
-| **P0** | `homepage.spec.ts` | Header, Search Bar, Mega-Menu, Store Switcher, Footer | 7 | 7 | 0 | ✅ **PASS** |
-| **P0** | `navigation.spec.ts` | Category Grid Clickability, Breadcrumb Navigation | 2 | 2 | 0 | ✅ **PASS** |
-| **P0** | `pdp-add-to-cart.spec.ts` | PDP Core Elements, Add to Cart Badge, Rapid Double-Click Safety | 5 | 5 | 0 | ✅ **PASS** |
-| **P0** | `search.spec.ts` | Broad Keyword Search, Nonsense Search Empty State, XSS Input Safety | 4 | 4 | 0 | ✅ **PASS** |
-| **P1** | `api-contracts.spec.ts` | Search Autocomplete AJAX Contract Verification | 1 | 1 | 0 | ✅ **PASS** |
-| **P1** | `order-history.spec.ts` | My Account Order List, Order Detail View, Tracking Error State | 3 | 0 | 3 | ⏸️ **SKIP** |
-| **P1** | `out-of-stock.spec.ts` | **(v1.7.0)** Dynamic Self-Healing OOS Discovery & CTA Disabled Check | 2 | 0 | 2 | ⏸️ **SKIP** |
-| **P1** | `price-parsing.spec.ts` | **(v1.9.0)** Price Parsing Unit Regression Suite | 2 | 2 | 0 | ✅ **PASS** |
-| **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | 1 | 1 | ✅ **PASS** |
-| **P1** | `store-switcher.spec.ts` | Store Switch Modal (`⚠️ UNVERIFIED — annotated observation pending manual check`) | 3 | 3 | 0 | ✅ **PASS** |
-| **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | 1 | 0 | ✅ **PASS** |
-| **P1** | `store-switcher-network.spec.ts` | **(v2.0.0)** Network-Level Server Session Cart Audit (`✅ NETWORK-VERIFIED`) | 1 | 1 | 0 | ✅ **PASS** |
-| **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | 1 | 0 | ✅ **PASS** |
-| **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings (`v1.9.0 assertion fix`) | 2 | 2 | 0 | ✅ **PASS** |
-| **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification (Homepage, PDP, Cart) | 3 | 3 | 0 | ✅ **PASS** |
-| **P2** | `static-pages.spec.ts` | About Us, Contact, FAQ, Terms, Shipping, Warranty, ISO, App, Reviews | 10 | 10 | 0 | ✅ **PASS** |
-| **TOTAL** | **16 Spec Files** | **Complete Production E2E & Regression Coverage** | **62** | **51** | **11** | **100% Pass** |
+| Tier | Suite File | Coverage Scope | Tests | v2.0.2 Status |
+| :---: | :--- | :--- | :---: | :--- |
+| **P0** | `auth.spec.ts` | Login UI, Registration Form, Guest Checkout Redirect | 5 | Mixed: passing, credential-gated, and v2.0.1-strengthened assertions pending live re-run |
+| **P0** | `cart.spec.ts` | Cart Item Verification, Subtotals, Quantity Updates, Empty State | 4 | Mixed: passing plus strengthened subtotal assertion pending live re-run |
+| **P0** | `checkout.spec.ts` | Serviceable PIN Check, Express Shipping, Order Summary Review | 4 | Credential-gated; still hard-stops before payment submission |
+| **P0** | `homepage.spec.ts` | Header, Search Bar, Mega-Menu, Store Switcher, Footer | 7 | Passing |
+| **P0** | `navigation.spec.ts` | Category Grid Clickability, Breadcrumb Navigation | 2 | Passing |
+| **P0** | `pdp-add-to-cart.spec.ts` | PDP Core Elements, Add to Cart Badge, Quantity Boundary, Rapid Double-Click Safety | 5 | Passing |
+| **P0** | `search.spec.ts` | Broad Keyword Search, Nonsense Search Empty State, XSS Input Safety | 4 | Passing |
+| **P1** | `api-contracts.spec.ts` | Search Autocomplete AJAX Contract Verification | 1 | Passing |
+| **P1** | `order-history.spec.ts` | My Account Order List, Order Detail View, Tracking Error State | 3 | Mixed: credential-gated account flows plus passing invalid tracking check |
+| **P1** | `out-of-stock.spec.ts` | Dynamic Self-Healing OOS Discovery & CTA Disabled Check | 2 | Conditional skip when no OOS product is discovered or WAF blocks discovery |
+| **P1** | `price-parsing.spec.ts` | Price Parsing Unit Regression Suite | 2 | Passing, with one intentionally UNVERIFIED live-format annotation |
+| **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | Mixed: malformed PIN passing; basket scaling credential-gated |
+| **P1** | `store-switcher.spec.ts` | Store Switch Modal and Cart Preservation Observation | 3 | Mixed: strengthened assertions pending live re-run; one UNVERIFIED behavior remains annotated |
+| **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | Passing |
+| **P1** | `store-switcher-network.spec.ts` | Network-Level Store Switch Responses & Session Cookie Mutation | 1 | Strengthened in v2.0.1; pending live headed re-run |
+| **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | Passing |
+| **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings | 2 | Passing |
+| **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification plus Platform-Gated Header Snapshot | 4 | Functional checks passing; visual baseline skips where platform PNG is not committed |
+| **P2** | `static-pages.spec.ts` | About Us, Contact, FAQ, Terms, Shipping, Warranty, ISO, App, Reviews, Bulk Quotation | 10 | Strengthened in v2.0.1; pending live headed re-run |
+| **TOTAL** | **19 Spec Files** | **Complete Production E2E & Regression Coverage** | **63** | See `docs/traceability.md` for per-test status |
 
 ---
 
@@ -108,7 +113,7 @@ ubuy-qa-automation/
 ├── Dockerfile                  # Official Playwright Ubuntu Jammy container build
 ├── .dockerignore               # Build exclusion filters for containerization
 ├── playwright.config.ts        # Playwright runner configuration (Headed Chromium, workers: 1)
-├── package.json                # Scripts, dependencies, and v2.0.0 version declaration
+├── package.json                # Scripts, dependencies, and v2.0.2 version declaration
 ├── tsconfig.json               # TypeScript strict mode compiler rules
 ├── .prettierrc.json            # Code formatting rules (100 line width, single quotes)
 ├── scripts/
@@ -123,7 +128,8 @@ ubuy-qa-automation/
 │   ├── RELEASE_v1.8.0.md       # Release v1.8.0 publication notes
 │   ├── RELEASE_v1.9.0.md       # Release v1.9.0 publication notes
 │   ├── RELEASE_v1.10.0.md      # Release v1.10.0 publication notes
-│   └── RELEASE_v2.0.0.md       # Release v2.0.0 publication notes
+│   ├── RELEASE_v2.0.0.md       # Release v2.0.0 publication notes
+│   └── releases/               # v2.0.1+ release notes, including v2.0.2 portability notes
 ├── src/
 │   ├── config/env.ts           # Strongly-typed environment variable loader
 │   ├── locators/               # Centralized CSS & DOM selector registry
@@ -163,9 +169,11 @@ Populate `.env` with your dedicated test account details once provisioned:
 BASE_URL=https://www.ubuy.co.in
 TEST_USER_EMAIL=qa-test-account@example.com
 TEST_USER_PASSWORD=your-secure-test-password
+HEADLESS=false
 ```
+`BASE_URL` is respected by page navigation and dynamic product discovery, so staging runs can point to staging without leaking discovery traffic to production.
 
-### 3. Docker Container Execution (`v2.0.0`)
+### 3. Docker Container Execution (`v2.0.2`)
 Build and run the official Playwright container environment:
 ```bash
 # Build production test container (verifies safety guardrail on build)
@@ -203,7 +211,7 @@ npm run lint
 
 ### Executing Test Suites against Live Production
 ```bash
-# Run the entire 62-test suite
+# Run the entire 63-test suite
 npm test
 
 # Execute by Priority Tier
@@ -227,14 +235,14 @@ npm run report
 In `v1.6.0`, automated performance budgeting and network contract validation are seamlessly integrated:
 - **Core Web Vitals Thresholds**: Asserts that `Time to First Byte (TTFB)` remains under `10,000ms` and `First Contentful Paint (FCP)` completes cleanly on live production pages.
 - **Conscious Scope Decision on API/Network Testing (§3.1)**: While standalone backend REST API testing remains out of scope, **light network-assertion coverage on UI-triggered AJAX calls** (such as live search autocomplete in `api-contracts.spec.ts`) is formally **in-scope**. It passively verifies HTTP status codes ($\ge 200$) and JSON payload structures during genuine user interactions without hitting standalone APIs directly.
-- **Dynamic Inventory Self-Healing (§2)**: Out-of-Stock tests (`out-of-stock.spec.ts`) dynamically discover current OOS SKUs at runtime (`findCurrentOosProduct`) instead of hardcoding static URLs.
+- **Dynamic Inventory Self-Healing (§2, hardened in v2.0.2)**: Out-of-Stock tests (`out-of-stock.spec.ts`) dynamically discover current OOS SKUs at runtime (`findCurrentOosProduct`) using `BASE_URL` from `src/config/env.ts`, instead of hardcoding production URLs.
 
 ---
 
 ## 🌐 Cloudflare WAF Resilience & Cross-Browser Rationale
 
 ### Automated WAF Handling: Mitigation vs. Solution (§3.3)
-When running automated tests against enterprise CDNs like Cloudflare, datacenter IPs may encounter defensive bot interstitials ("Just a moment..."). Our framework integrates a built-in WAF detector within `base.fixture.ts`. If a WAF interstitial is detected, the fixture safely marks the test as skipped with reason `environment-blocked-by-waf`.
+When running automated tests against enterprise CDNs like Cloudflare, datacenter IPs may encounter defensive bot interstitials ("Just a moment..."). Our framework integrates a built-in WAF detector within `base.fixture.ts`. If a WAF interstitial is detected, the fixture safely marks the test as skipped with reason `environment-blocked-by-waf`. As of v2.0.2, the raw `beforeAll` page used for OOS discovery applies the same cookie-banner suppression and WAF check before reporting discovery results.
 - **WAF Mitigation:** Automated retry-with-backoff (up to 3 retries with exponential delay) in `.github/workflows/nightly-smoke.yml` serves as an active **mitigation** to smooth over transient datacenter IP challenges.
 - **WAF Solution:** A self-hosted corporate or residential runner remains the only permanent **solution** for 100% reliable scheduled runs against production without Cloudflare datacenter IP reputation blocks.
 
