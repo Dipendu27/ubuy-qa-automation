@@ -7,7 +7,7 @@
  * - Cancelling preserves the cart
  */
 
-import { test } from '../../src/fixtures/base.fixture.js';
+import { test, expect } from '../../src/fixtures/base.fixture.js';
 import productsData from '../../src/fixtures/test-data/products.json' with { type: 'json' };
 
 test.describe('Store Switcher — P1 Business Rules', () => {
@@ -61,7 +61,11 @@ test.describe('Store Switcher — P1 Business Rules', () => {
     });
 
     await test.step('Switch to US store and confirm', async () => {
-      await storeSwitcher.switchStoreAndConfirm('US');
+      // Cart is non-empty here, so the confirm modal MUST appear (v2.0.1).
+      const modalAppeared = await storeSwitcher.switchStoreAndConfirm('US');
+      expect(modalAppeared, 'Confirm modal must appear when switching with items in cart').toBe(
+        true,
+      );
     });
 
     await test.step('Verify cart items are preserved across region switch', async () => {
@@ -87,7 +91,11 @@ test.describe('Store Switcher — P1 Business Rules', () => {
     });
 
     await test.step('Attempt to switch to UK store and cancel', async () => {
-      await storeSwitcher.switchStoreAndCancel('UK');
+      // Cart is non-empty here, so the confirm modal MUST appear (v2.0.1).
+      const modalAppeared = await storeSwitcher.switchStoreAndCancel('UK');
+      expect(modalAppeared, 'Confirm modal must appear when switching with items in cart').toBe(
+        true,
+      );
     });
 
     await test.step('Verify cart still has items', async () => {

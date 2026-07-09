@@ -34,12 +34,26 @@ export class StoreSwitcher {
     this.confirmNo = page.locator(homeLocators.storeSwitchConfirmNo).first();
   }
 
-  /** Open the store switcher dropdown */
+  /**
+   * Open the store switcher dropdown.
+   *
+   * v2.0.1: The dropdown assertion is now UNCONDITIONAL — if the dropdown does
+   * not open, this method fails instead of silently passing. Some headers
+   * require a hover before the click registers, so the click is retried once.
+   */
   async open(): Promise<void> {
     await this.trigger.click();
-    if (await this.dropdown.isVisible().catch(() => false)) {
-      await expect(this.dropdown).toBeVisible();
+    const openedOnFirstClick = await this.dropdown
+      .waitFor({ state: 'visible', timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!openedOnFirstClick) {
+      // Retry once: hover first (some headers need it), then click again.
+      await this.trigger.hover();
+      await throttle();
+      await this.trigger.click();
     }
+    await expect(this.dropdown).toBeVisible({ timeout: 10_000 });
     await throttle();
   }
 
@@ -53,34 +67,53 @@ export class StoreSwitcher {
 
   /**
    * Switch store and confirm (click YES to clear cart).
-   * Use this when you expect the confirm modal to appear.
+   *
+   * The modal only appears when the cart has items, so the guard is legitimate —
+   * but callers that KNOW the cart is non-empty must assert on the returned
+   * `modalAppeared` flag (v2.0.1) instead of trusting a silent pass.
+   *
+   * @returns `true` if the confirm modal appeared and YES was clicked.
    */
-  async switchStoreAndConfirm(region: StoreRegion): Promise<void> {
+  async switchStoreAndConfirm(region: StoreRegion): Promise<boolean> {
     await this.selectStore(region);
-    if (await this.confirmModal.isVisible().catch(() => false)) {
+    const modalAppeared = await this.confirmModal
+      .waitFor({ state: 'visible', timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (modalAppeared) {
       await this.confirmYes.click();
     }
     await throttle(2000, 4000);
+    return modalAppeared;
   }
 
   /**
    * Switch store and cancel (click NO to preserve cart).
-   * Use this when you want to verify the cart is preserved on cancel.
+   *
+   * @returns `true` if the confirm modal appeared and NO was clicked.
    */
-  async switchStoreAndCancel(region: StoreRegion): Promise<void> {
+  async switchStoreAndCancel(region: StoreRegion): Promise<boolean> {
     await this.selectStore(region);
-    if (await this.confirmModal.isVisible().catch(() => false)) {
+    const modalAppeared = await this.confirmModal
+      .waitFor({ state: 'visible', timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (modalAppeared) {
       await this.confirmNo.click();
     }
     await throttle();
+    return modalAppeared;
   }
 
-  /** Assert the confirm modal appears with the expected message */
+  /**
+   * Assert the confirm modal appears.
+   *
+   * v2.0.1: This is now an UNCONDITIONAL assertion — previously it only
+   * asserted visibility when the modal was already visible (a no-op that
+   * could never fail).
+   */
   async expectConfirmModalVisible(): Promise<void> {
-    const isModalVisible = await this.confirmModal.isVisible().catch(() => false);
-    if (isModalVisible) {
-      await expect(this.confirmModal).toBeVisible();
-    }
+    await expect(this.confirmModal).toBeVisible({ timeout: 10_000 });
   }
 
   /** Assert the store switcher is visible in the header */
