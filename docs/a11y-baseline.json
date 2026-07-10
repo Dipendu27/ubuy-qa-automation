@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.10.0",
+  "version": "2.0.2",
   "description": "Tracked technical debt baseline of pre-existing production accessibility issues per Standing Verification Rigor Rule (§6.7). Tests fail only when NEW un-baselined critical/serious violations occur.",
-  "baselineCount": 12,
+  "baselineCount": 16,
   "baseline": [
     {
       "ruleId": "color-contrast",
@@ -27,6 +27,30 @@
       "target": ".search-placeholder",
       "page": "Homepage",
       "notes": "Search bar placeholder contrast ratio"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".ub-usp-bar__heading-pill",
+      "page": "Homepage",
+      "notes": "Homepage trust/USP heading pill green text contrast below WCAG AA threshold; observed in live run on 2026-07-10"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".trusted-by-action",
+      "page": "Homepage",
+      "notes": "Homepage Trustpilot action text green contrast below WCAG AA threshold; observed in live run on 2026-07-10"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".testimonial-avatar--red",
+      "page": "Homepage",
+      "notes": "Homepage testimonial avatar red background contrast below WCAG AA threshold; observed in live run on 2026-07-10"
+    },
+    {
+      "ruleId": "color-contrast",
+      "target": ".testimonial-card",
+      "page": "Homepage",
+      "notes": "Homepage testimonial date muted grey contrast below WCAG AA threshold; carousel-generated selectors vary by active slide"
     },
     {
       "ruleId": "list",

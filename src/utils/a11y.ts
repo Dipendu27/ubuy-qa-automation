@@ -50,18 +50,20 @@ function isBaselined(
   pageName: string,
   baseline: A11yBaselineEntry[],
 ): boolean {
-  return baseline.some((entry) => {
-    if (entry.ruleId !== violation.id) {
-      return false;
-    }
+  const matchingEntries = baseline.filter((entry) => {
     const pageMatch = entry.page === '*' || entry.page.toLowerCase() === pageName.toLowerCase();
-    if (!pageMatch) {
-      return false;
-    }
-    return violation.nodes.some((node) =>
-      node.target.some((selector) => String(selector).includes(entry.target)),
-    );
+    return entry.ruleId === violation.id && pageMatch;
   });
+
+  if (matchingEntries.length === 0) {
+    return false;
+  }
+
+  return violation.nodes.every((node) =>
+    node.target.some((selector) =>
+      matchingEntries.some((entry) => String(selector).includes(entry.target)),
+    ),
+  );
 }
 
 export async function checkA11y(page: Page, pageName: string): Promise<void> {

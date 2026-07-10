@@ -20,7 +20,8 @@ export const homeLocators = {
   // --- Store Switcher ---
   storeSwitcherTrigger:
     '.country-selector-footer button:visible, #dropdownMenuButton:visible, [data-bs-toggle="dropdown"]:visible, [data-store-switcher]:visible, .store-switcher:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
-  storeSwitcherDropdown: '.dropdown-menu, .store-switcher-dropdown, [role="listbox"]', // 🔶 UNVERIFIED (heuristic fallback selector)
+  storeSwitcherDropdown:
+    '.dropdown-menu.show, .dropdown-menu:visible, .store-switcher-dropdown:visible, [role="listbox"]:visible', // 🔶 UNVERIFIED (heuristic fallback selector)
   storeSwitcherOption: (storeName: string) =>
     `.dropdown-item[title*="${storeName}" i], .dropdown-item:has-text("${storeName}"), [data-store="${storeName}"]`, // 🔶 UNVERIFIED (heuristic fallback selector)
   storeSwitchConfirmModal: '.modal, .modal-popup, [role="dialog"], .modal-content', // 🔶 UNVERIFIED (heuristic fallback selector)
