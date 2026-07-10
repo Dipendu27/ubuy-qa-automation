@@ -97,7 +97,7 @@ Our verification suite consists of **63 tests** distributed across **19 specific
 | **P1** | `shipping-calculation.spec.ts` | Malformed PIN Validation Safety, Basket Quantity Scaling | 2 | Mixed: malformed PIN passing; basket scaling credential-gated |
 | **P1** | `store-switcher.spec.ts` | Store Switch Modal and Cart Preservation Observation | 3 | Mixed: strengthened assertions pending live re-run; one UNVERIFIED behavior remains annotated |
 | **P1** | `store-switcher-currency.spec.ts` | Header Region Selector Trigger & Dropdown Auditing | 1 | Passing |
-| **P1** | `store-switcher-network.spec.ts` | Network-Level Store Switch Responses & Session Cookie Mutation | 1 | Strengthened in v2.0.1; pending live headed re-run |
+| **P1** | `store-switcher-network.spec.ts` | Network-Level Store Switch Responses & Session Cookie Mutation | 1 | ✅ **PASS** (`v2.0.2` open dropdown selector verified live) |
 | **P2** | `footer-links.spec.ts` | Footer Navigation Links Integrity & Dead Link Detection | 1 | Passing |
 | **P2** | `performance.spec.ts` | Homepage & PDP Core Web Vitals Navigation Timings | 2 | Passing |
 | **P2** | `responsive.spec.ts` | Mobile Viewport Layout Verification plus Platform-Gated Header Snapshot | 4 | Functional checks passing; visual baseline skips where platform PNG is not committed |
@@ -121,6 +121,8 @@ ubuy-qa-automation/
 ├── docs/                       # Comprehensive documentation & release notes
 │   ├── a11y-baseline.json      # Tracked technical debt baseline of 12 legacy production a11y issues
 │   ├── discovery-log.md        # Live site discovery log & Standing Verification Rigor Rule (§6.7)
+│   ├── traceability.md         # Ground-truth requirements & test execution status traceability matrix
+│   ├── evidence/               # Visual snapshots and proof artifacts
 │   ├── RELEASE_v1.4.0.md       # Release v1.4.0 publication notes
 │   ├── RELEASE_v1.5.0.md       # Release v1.5.0 publication notes
 │   ├── RELEASE_v1.6.0.md       # Release v1.6.0 publication notes
